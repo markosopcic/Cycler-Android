@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="5dp"  android:layout_width="match_parent">
+    <item
+        android:id="@+id/homeButton"
+        android:title="Home"
+        android:enabled="true" />
+    <item
+        android:id="@+id/startTracking"
+        android:enabled="true"
+        android:title="Start Ride" />
+    <item
+        android:id="@+id/invitations"
+        android:enabled="true"
+        android:title="Invitations" />
+
+    <item
+        android:id="@+id/logout"
+        android:enabled="true"
+        android:title="Logout" />
+
+
+</menu>
