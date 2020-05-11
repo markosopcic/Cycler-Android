@@ -19,6 +19,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
         val logo = findViewById<TextView>(R.id.logo)
         val login = findViewById<Button>(R.id.loginButton)
         val emailView = findViewById<TextView>(R.id.emailInput)
@@ -43,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
 
     fun sendLogin(email: String, password: String) {
         Thread {
