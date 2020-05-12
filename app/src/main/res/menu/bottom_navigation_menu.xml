@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="5dp"  android:layout_width="match_parent">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/homeButton"
         android:title="Home"
@@ -9,14 +9,18 @@
         android:enabled="true"
         android:title="Start Ride" />
     <item
-        android:id="@+id/invitations"
+        android:id="@+id/invitationsTab"
         android:enabled="true"
         android:title="Invitations" />
-
+    <item
+        android:id="@+id/friendsTab"
+        android:enabled="true"
+        android:title="Friends" />
     <item
         android:id="@+id/logout"
         android:enabled="true"
         android:title="Logout" />
+
 
 
 </menu>

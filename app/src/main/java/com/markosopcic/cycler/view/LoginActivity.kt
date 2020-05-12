@@ -1,5 +1,6 @@
 package com.markosopcic.cycler.view
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.markosopcic.cycler.R
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.forms.LoginForm
+import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.android.ext.android.get
+import java.util.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -19,28 +22,22 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
-        val logo = findViewById<TextView>(R.id.logo)
-        val login = findViewById<Button>(R.id.loginButton)
-        val emailView = findViewById<TextView>(R.id.emailInput)
-        val passwordView = findViewById<TextView>(R.id.passwordInput)
         logo.typeface = Typeface.createFromAsset(assets, "fonts/Lobster-Regular.ttf")
-        login.setOnClickListener {
+        loginButton.setOnClickListener {
+            if(emailInput.text.isEmpty() || passwordInput.text.isEmpty()){
+                Toast.makeText(this,"Email or password is empty!",Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             sendLogin(
-                emailView.text.toString(),
-                passwordView.text.toString()
+                emailInput.text.toString(),
+                passwordInput.text.toString()
             )
         }
 
         val register = findViewById<Button>(R.id.registerButton)
         register.setOnClickListener {
-            Thread {
-
-                var response = api.searchUsers("dar").execute()
-                for (us in response.body()!!) {
-                    Log.d("NETWOKRING", us.fullName)
-                }
-            }.start()
+            var intent = Intent(this,RegisterActivity::class.java)
+            startActivity(intent)
         }
 
     }
@@ -48,11 +45,14 @@ class LoginActivity : AppCompatActivity() {
 
     fun sendLogin(email: String, password: String) {
         Thread {
-            var offset = -120
+            val tz = TimeZone.getDefault()
+            val now = Date()
+            val offset = -tz.getOffset(now.time) / 60000
             var response = api.login(
                 LoginForm(
                     email,
-                    password
+                    password,
+                    offset
                 )
             ).execute()
             if (response.code() != 200) {
@@ -60,6 +60,9 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 runOnUiThread {
                     Toast.makeText(this, "Successful login!", Toast.LENGTH_SHORT).show()
+                    var intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
             }
 

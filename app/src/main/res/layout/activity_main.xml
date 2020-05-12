@@ -8,7 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/container">
-        <!-- Main content -->
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             app:labelVisibilityMode="labeled"
             android:id="@+id/bottom_navigation"
@@ -16,6 +23,6 @@
             android:background="@color/colorAccent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:menu="@layout/bottom_navigation_menu" />
+            app:menu="@menu/bottom_navigation_menu" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,4 +14,7 @@ interface CyclerAPI {
 
     @GET("/api/search-users?")
     fun searchUsers(@Query("term") term: String): Call<List<UserSearchResult>>
+
+    @GET("/mobile/logout")
+    fun logout() : Call<Void>
 }
