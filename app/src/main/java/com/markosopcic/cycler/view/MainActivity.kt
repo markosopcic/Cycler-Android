@@ -3,12 +3,16 @@ package com.markosopcic.cycler.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.markosopcic.cycler.R
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.utility.Constants
 import org.koin.android.ext.android.get
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -35,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                     // Respond to navigation item 2 click
                     true
                 }
-                R.id.logout -> {
+                R.id.profile -> {
                     logout()
                     true
                 }
@@ -49,13 +53,19 @@ class MainActivity : AppCompatActivity() {
 
     fun logout(): Unit{
         Thread {
-            var response = cyclerAPI.logout().execute()
-            if(response.isSuccessful){
-                getSharedPreferences(Constants.PREFERENCE_NAME,Context.MODE_PRIVATE).getStringSet(Constants.PREFERENCE_KEY,null)?.clear()
-                var intent = Intent(this, LoginActivity::class.java)
-                runOnUiThread{startActivity(intent)}
-                finish()
-            }
+            var response = cyclerAPI.logout().enqueue(object : Callback<Void>{
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Toast.makeText(this@MainActivity,"Something has gone wrong! Try again later.",Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    getSharedPreferences(Constants.PREFERENCE_NAME,Context.MODE_PRIVATE).getStringSet(Constants.PREFERENCE_KEY,null)?.clear()
+                    var intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    runOnUiThread{startActivity(intent)}
+                    finish()
+                }
+
+            })
         }.start()
 
     }

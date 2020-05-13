@@ -12,7 +12,11 @@ import com.markosopcic.cycler.R
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.forms.LoginForm
 import kotlinx.android.synthetic.main.activity_login.*
+import okhttp3.ResponseBody
 import org.koin.android.ext.android.get
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 class LoginActivity : AppCompatActivity() {
@@ -48,23 +52,29 @@ class LoginActivity : AppCompatActivity() {
             val tz = TimeZone.getDefault()
             val now = Date()
             val offset = -tz.getOffset(now.time) / 60000
-            var response = api.login(
+            api.login(
                 LoginForm(
                     email,
                     password,
                     offset
                 )
-            ).execute()
-            if (response.code() != 200) {
-                runOnUiThread { Toast.makeText(this, "Invalid login", Toast.LENGTH_SHORT).show(); }
-            } else {
-                runOnUiThread {
-                    Toast.makeText(this, "Successful login!", Toast.LENGTH_SHORT).show()
-                    var intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+            ).enqueue(object : Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    runOnUiThread { Toast.makeText(this@LoginActivity, "Invalid login", Toast.LENGTH_SHORT).show(); }
                 }
-            }
+
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    runOnUiThread {
+                        Toast.makeText(this@LoginActivity, "Successful login!", Toast.LENGTH_SHORT).show()
+                        var intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
+            })
 
         }.start()
     }

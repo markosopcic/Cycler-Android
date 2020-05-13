@@ -3,23 +3,29 @@
     <item
         android:id="@+id/homeButton"
         android:title="Home"
-        android:enabled="true" />
-    <item
-        android:id="@+id/startTracking"
         android:enabled="true"
-        android:title="Start Ride" />
+        android:icon="@drawable/ic_home_black_24dp"/>
+
     <item
         android:id="@+id/invitationsTab"
         android:enabled="true"
-        android:title="Invitations" />
+        android:title="Invitations"
+        android:icon="@drawable/ic_group_add_black_24dp"/>
+    <item
+        android:id="@+id/startTracking"
+        android:enabled="true"
+        android:title="Start Ride"
+        android:icon="@drawable/ic_local_hospital_black_24dp"/>
     <item
         android:id="@+id/friendsTab"
         android:enabled="true"
-        android:title="Friends" />
+        android:title="Friends"
+        android:icon="@drawable/ic_people_black_24dp"/>
     <item
-        android:id="@+id/logout"
+        android:id="@+id/profile"
         android:enabled="true"
-        android:title="Logout" />
+        android:title="Profile"
+        android:icon="@drawable/ic_person_black_24dp"/>
 
 
 

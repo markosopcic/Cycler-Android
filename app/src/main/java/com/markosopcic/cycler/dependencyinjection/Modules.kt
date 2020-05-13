@@ -1,6 +1,7 @@
 package com.markosopcic.cycler.dependencyinjection
 
 import android.content.Context
+import com.markosopcic.cycler.network.CustomTrust
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.interceptors.AddCookiesInterceptor
 import com.markosopcic.cycler.network.interceptors.ReceivedCookiesInterceptor
@@ -33,7 +34,7 @@ val networkModule = module {
 
 fun provideRetrofitInstance(context: Context): Retrofit {
     return Retrofit.Builder().client(
-        OkHttpClient.Builder().addInterceptor(AddCookiesInterceptor(context))
+        CustomTrust.GetCustomTrustClient().addInterceptor(AddCookiesInterceptor(context))
             .addInterceptor(ReceivedCookiesInterceptor(context)).build()
     ).baseUrl(
         Constants.ROOT_URL
