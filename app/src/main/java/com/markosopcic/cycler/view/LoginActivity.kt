@@ -12,6 +12,7 @@ import com.markosopcic.cycler.R
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.forms.LoginForm
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.ResponseBody
 import org.koin.android.ext.android.get
 import retrofit2.Call

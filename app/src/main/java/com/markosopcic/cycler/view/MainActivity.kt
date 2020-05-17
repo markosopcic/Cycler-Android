@@ -5,10 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.markosopcic.cycler.R
 import com.markosopcic.cycler.network.CyclerAPI
+import com.markosopcic.cycler.network.models.FriendRequestResponse
 import com.markosopcic.cycler.utility.Constants
+import com.markosopcic.cycler.view.adapters.FriendRequestsAdapter
+import com.markosopcic.cycler.view.fragments.*
+import kotlinx.android.synthetic.main.invitations_fragment.*
 import org.koin.android.ext.android.get
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,7 +24,11 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     var cyclerAPI = get<CyclerAPI>()
-
+    lateinit var homeFragment : HomeFragment
+    lateinit var invitationsFragment : InvitationsFragment
+    lateinit var friendsFragment : FriendsFragment
+    lateinit var trackingFragment : TrackingFragment
+    lateinit var profileFragment: ProfileFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,23 +42,32 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.homeButton -> {
-                    // Respond to navigation item 1 click
+                    homeFragment = HomeFragment()
+                    supportFragmentManager.beginTransaction().replace(R.id.placeholder,homeFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
                     true
                 }
                 R.id.invitationsTab -> {
-                    // Respond to navigation item 2 click
+                    invitationsFragment = InvitationsFragment()
+                    supportFragmentManager.beginTransaction().replace(R.id.placeholder,invitationsFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
                     true
                 }
                 R.id.profile -> {
-                    logout()
+                    profileFragment = ProfileFragment()
+                    supportFragmentManager.beginTransaction().replace(R.id.placeholder,profileFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
                     true
                 }
                 R.id.startTracking -> {
+                    trackingFragment = TrackingFragment()
+                    supportFragmentManager.beginTransaction().replace(R.id.placeholder,trackingFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
                     true
                 }
                 else -> false
             }
         }
+
+
+
+
     }
 
     fun logout(): Unit{

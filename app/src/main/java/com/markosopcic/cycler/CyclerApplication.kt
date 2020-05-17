@@ -2,6 +2,7 @@ package com.markosopcic.cycler
 
 import android.app.Application
 import com.markosopcic.cycler.dependencyinjection.networkModule
+import com.markosopcic.cycler.dependencyinjection.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -13,7 +14,7 @@ class CyclerApplication : Application() {
         startKoin {
             androidLogger(Level.DEBUG)
             androidContext(this@CyclerApplication)
-            modules(listOf(networkModule))
+            modules(listOf(networkModule,viewModelModule))
         }
     }
 }

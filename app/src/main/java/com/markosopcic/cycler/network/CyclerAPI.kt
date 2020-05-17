@@ -1,6 +1,7 @@
 package com.markosopcic.cycler.network
 
 import com.markosopcic.cycler.network.forms.LoginForm
+import com.markosopcic.cycler.network.models.FriendRequestResponse
 import com.markosopcic.cycler.network.models.UserSearchResult
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -17,4 +18,10 @@ interface CyclerAPI {
 
     @GET("/mobile/logout")
     fun logout() : Call<Void>
+
+    @GET("/mobile/friend-requests")
+    fun getFriendRequests() : Call<List<FriendRequestResponse>>
+
+    @GET("mobile/accept-friend-request")
+    fun acceptFriendRequest(@Query("fromUser") fromUserId:String,@Query("accept") accept:Boolean) : Call<Void>
 }
