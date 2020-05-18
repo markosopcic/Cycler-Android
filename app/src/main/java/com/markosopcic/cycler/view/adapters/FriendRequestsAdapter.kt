@@ -12,11 +12,12 @@ import com.markosopcic.cycler.R
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.models.FriendRequestResponse
 import kotlinx.android.synthetic.main.friend_request.view.*
+import kotlinx.coroutines.CoroutineScope
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FriendRequestsAdapter(private var requests:ArrayList<FriendRequestResponse>,var onAcceptRequest : ((String,Boolean) -> Unit)? = null) : RecyclerView.Adapter<FriendRequestsAdapter.FriendRequestsViewHolder>(){
+class FriendRequestsAdapter(private var requests:ArrayList<FriendRequestResponse>,var onAcceptRequest : ((String,Boolean,Int) -> Unit)? = null) : RecyclerView.Adapter<FriendRequestsAdapter.FriendRequestsViewHolder>(){
 
 
 
@@ -39,25 +40,31 @@ class FriendRequestsAdapter(private var requests:ArrayList<FriendRequestResponse
     }
 
 
-    override fun onBindViewHolder(holder: FriendRequestsViewHolder, position: Int) {
+    override  fun onBindViewHolder(holder: FriendRequestsViewHolder, position: Int) {
         val currentItem = requests[position]
         holder.requesterName.text = currentItem.senderName
         holder.requestedTime.text = currentItem.timeSent.toString()
         holder.requesterId.text = currentItem.sender
         holder.acceptButton.setOnClickListener{
-            onAcceptRequest?.invoke(holder.requesterId.text.toString(),true)
+             onAcceptRequest?.invoke(holder.requesterId.text.toString(),true,position)
         }
 
         holder.denyButton.setOnClickListener{
-            onAcceptRequest?.invoke(holder.requesterId.text.toString(),false)
+             onAcceptRequest?.invoke(holder.requesterId.text.toString(),false,position)
         }
 
     }
 
     override fun getItemCount() = requests.size
 
+    fun removeItem(index:Int){
+        requests.removeAt(index)
+        notifyItemRemoved(index)
+    }
+
     fun changeDataset(list: ArrayList<FriendRequestResponse>) {
         requests = list
+        notifyDataSetChanged()
     }
 
 }

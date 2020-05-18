@@ -6,15 +6,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.markosopcic.cycler.R
 import com.markosopcic.cycler.network.CyclerAPI
-import com.markosopcic.cycler.network.models.FriendRequestResponse
 import com.markosopcic.cycler.utility.Constants
-import com.markosopcic.cycler.view.adapters.FriendRequestsAdapter
 import com.markosopcic.cycler.view.fragments.*
-import kotlinx.android.synthetic.main.invitations_fragment.*
 import org.koin.android.ext.android.get
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,8 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     var cyclerAPI = get<CyclerAPI>()
     lateinit var homeFragment : HomeFragment
-    lateinit var invitationsFragment : InvitationsFragment
-    lateinit var friendsFragment : FriendsFragment
+    lateinit var invitationsFragment: InvitationsFragment
     lateinit var trackingFragment : TrackingFragment
     lateinit var profileFragment: ProfileFragment
     override fun onCreate(savedInstanceState: Bundle?) {

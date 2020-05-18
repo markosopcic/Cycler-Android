@@ -6,6 +6,7 @@ import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.interceptors.AddCookiesInterceptor
 import com.markosopcic.cycler.network.interceptors.ReceivedCookiesInterceptor
 import com.markosopcic.cycler.utility.Constants
+import com.markosopcic.cycler.viewmodel.EventInvitationsViewModel
 import com.markosopcic.cycler.viewmodel.FriendRequestsViewModel
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
@@ -35,6 +36,10 @@ val networkModule = module {
 val viewModelModule = module{
     single{
         FriendRequestsViewModel(get(),get())
+    }
+
+    single{
+        EventInvitationsViewModel(get(),get())
     }
 }
 

@@ -1,6 +1,7 @@
 package com.markosopcic.cycler.network
 
 import com.markosopcic.cycler.network.forms.LoginForm
+import com.markosopcic.cycler.network.models.EventInvitationResponse
 import com.markosopcic.cycler.network.models.FriendRequestResponse
 import com.markosopcic.cycler.network.models.UserSearchResult
 import okhttp3.ResponseBody
@@ -24,4 +25,10 @@ interface CyclerAPI {
 
     @GET("mobile/accept-friend-request")
     fun acceptFriendRequest(@Query("fromUser") fromUserId:String,@Query("accept") accept:Boolean) : Call<Void>
+
+    @GET("/mobile/invitations")
+    fun getEventInvitations() : Call<List<EventInvitationResponse>>
+
+    @GET("/mobile/accept-invitation")
+    fun acceptInvitation(@Query("InvitationId") invitationId : String, @Query("accept") accept: Boolean) : Call<Void>
 }

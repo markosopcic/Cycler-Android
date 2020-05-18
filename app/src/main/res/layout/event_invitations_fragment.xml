@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_gravity="top"
     android:layout_height="match_parent"
-    tools:context=".view.fragments.InvitationsFragment"
+    tools:context=".view.fragments.FriendRequestsFragment"
     tools:listitem="@layout/friend_request">
 
 

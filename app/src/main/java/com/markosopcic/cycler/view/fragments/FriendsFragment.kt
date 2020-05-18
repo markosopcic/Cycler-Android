@@ -16,7 +16,6 @@ class FriendsFragment : Fragment() {
         fun newInstance() = FriendsFragment()
     }
 
-    private lateinit var viewModel: FriendsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,7 +26,6 @@ class FriendsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(FriendsViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
