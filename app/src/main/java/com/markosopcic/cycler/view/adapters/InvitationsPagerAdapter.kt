@@ -7,16 +7,31 @@ import com.markosopcic.cycler.view.fragments.EventInvitationsFragment
 import com.markosopcic.cycler.view.fragments.FriendRequestsFragment
 
 class InvitationsPagerAdapter (fm: FragmentManager) : FragmentPagerAdapter(fm){
+
+    lateinit var friendRequestsFragment: FriendRequestsFragment
+    lateinit var eventInvitationsFragment: EventInvitationsFragment
+
     override fun getItem(position: Int): Fragment {
         return when(position){
             0 ->{
-                FriendRequestsFragment()
+                if(!::friendRequestsFragment.isInitialized){
+                    friendRequestsFragment =  FriendRequestsFragment()
+                }
+                friendRequestsFragment
+
             }
             1 -> {
-                EventInvitationsFragment()
+                if(!::eventInvitationsFragment.isInitialized){
+                    eventInvitationsFragment =  EventInvitationsFragment()
+                }
+                eventInvitationsFragment
             }
             else ->{
-               return FriendRequestsFragment()
+                if(!::friendRequestsFragment.isInitialized){
+                    friendRequestsFragment =  FriendRequestsFragment()
+                }
+                friendRequestsFragment
+
             }
         }
     }

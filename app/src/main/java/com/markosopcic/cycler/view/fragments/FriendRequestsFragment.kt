@@ -34,14 +34,28 @@ class FriendRequestsFragment : Fragment() {
 
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val res = inflater.inflate(R.layout.friend_requests_fragment, container, false)
+        return inflater.inflate(R.layout.friend_requests_fragment, container, false)
+    }
 
-        return res
+    fun refreshRequests(){
+        viewModel.refreshFriendRequests()
     }
 
 }

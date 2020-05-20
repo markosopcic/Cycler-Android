@@ -28,9 +28,17 @@ class InvitationsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val fragmentAdapter = InvitationsPagerAdapter(parentFragmentManager)
+        val fragmentAdapter = InvitationsPagerAdapter(childFragmentManager)
         invitations_view_pager.adapter = fragmentAdapter
         invitations_tab_layout.setupWithViewPager(invitations_view_pager)
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
     }
 
 }

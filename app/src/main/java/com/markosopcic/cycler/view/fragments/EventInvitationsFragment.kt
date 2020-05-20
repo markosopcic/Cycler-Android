@@ -37,6 +37,11 @@ class EventInvitationsFragment : Fragment() {
 
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +50,10 @@ class EventInvitationsFragment : Fragment() {
         val res = inflater.inflate(R.layout.event_invitations_fragment, container, false)
 
         return res
+    }
+
+    fun refreshInvitations(){
+        viewModel.refreshEventInvitations()
     }
 
 }

@@ -20,10 +20,10 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     var cyclerAPI = get<CyclerAPI>()
-    lateinit var homeFragment : HomeFragment
-    lateinit var invitationsFragment: InvitationsFragment
-    lateinit var trackingFragment : TrackingFragment
-    lateinit var profileFragment: ProfileFragment
+     lateinit var homeFragment : HomeFragment
+     lateinit var invitationsFragment: InvitationsFragment
+     lateinit var trackingFragment : TrackingFragment
+     lateinit var profileFragment: ProfileFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,22 +37,31 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.homeButton -> {
-                    homeFragment = HomeFragment()
+                    if (!::homeFragment.isInitialized){
+                        homeFragment = HomeFragment()
+                    }
                     supportFragmentManager.beginTransaction().replace(R.id.placeholder,homeFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
                     true
                 }
                 R.id.invitationsTab -> {
-                    invitationsFragment = InvitationsFragment()
+                    if (!::invitationsFragment.isInitialized){
+                        invitationsFragment = InvitationsFragment()
+                    }
                     supportFragmentManager.beginTransaction().replace(R.id.placeholder,invitationsFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
                     true
                 }
                 R.id.profile -> {
-                    profileFragment = ProfileFragment()
+                    if (!::profileFragment.isInitialized){
+                        profileFragment = ProfileFragment()
+                    }
                     supportFragmentManager.beginTransaction().replace(R.id.placeholder,profileFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+
                     true
                 }
                 R.id.startTracking -> {
-                    trackingFragment = TrackingFragment()
+                    if (!::trackingFragment.isInitialized){
+                        trackingFragment = TrackingFragment()
+                    }
                     supportFragmentManager.beginTransaction().replace(R.id.placeholder,trackingFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
                     true
                 }
