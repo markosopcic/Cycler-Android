@@ -54,6 +54,7 @@
     <ImageButton
         android:id="@+id/stop_tracking_button"
         android:layout_width="100dp"
+        android:visibility="invisible"
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"

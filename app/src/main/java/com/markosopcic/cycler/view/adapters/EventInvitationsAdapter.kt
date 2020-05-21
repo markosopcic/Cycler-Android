@@ -39,6 +39,7 @@ class EventInvitationsAdapter(private var requests:ArrayList<EventInvitationResp
        holder.senderName.text ="Invited by: "+ currentItem.invitedBy.firstName + " "+ currentItem.invitedBy.lastName
        holder.startTime.text ="Start time: " +  currentItem.eventStartTime
        holder.eventName.text = currentItem.eventName
+       holder.invitationId.text = currentItem.invitationId
        holder.description.text = currentItem.eventDescription
 
 

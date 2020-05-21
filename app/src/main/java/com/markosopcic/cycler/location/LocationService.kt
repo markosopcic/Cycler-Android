@@ -16,16 +16,25 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.markosopcic.cycler.R
+import com.markosopcic.cycler.network.CyclerAPI
+import com.markosopcic.cycler.network.forms.LocationModel
 import com.markosopcic.cycler.view.MainActivity
 import io.reactivex.disposables.Disposable
+import org.koin.android.ext.android.get
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 
 class LocationService : Service() {
-    var interval = 1000
+
+    var cyclerAPI:CyclerAPI = get()
     private val mBinder: IBinder = LocationBinder()
+    var liveTracking : Boolean = false
     var locationListeners: MutableList<ILocationListener> =
         ArrayList()
     var locationManager: LocationManager? = null
@@ -45,12 +54,17 @@ class LocationService : Service() {
                     String.format("%.2f %f", d, location.accuracy)
                 )
             }
-            if (lastLocation == null || location.time - lastLocation!!.time > interval || location.accuracy < lastLocation!!.accuracy)
+            if (lastLocation == null  || location.accuracy < lastLocation!!.accuracy || location.time > lastLocation!!.time)
             {
                 lastLocation = location
-                for(listener in listeners){
-                    listener.nextLocation(location)
-                }
+                cyclerAPI.sendLocation(LocationModel("x",location.longitude,location.latitude)).enqueue(object :
+                    Callback<Void> {
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                    }
+
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    }
+                })
             }
         }
 
@@ -86,21 +100,20 @@ class LocationService : Service() {
         }
         locationManager =
             getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val input = intent.getStringExtra("inputExtra")
-        interval = intent.getIntExtra("interval", interval)
-        val networkGPS = intent.getBooleanExtra("network", false)
         createNotificationChannel()
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this,
             0, notificationIntent, 0
         )
+        liveTracking = intent.getBooleanExtra("liveTracking",false)
+        val trackingId = intent.getStringExtra("trackingId")
         val notification = NotificationCompat.Builder(
             this,
             CHANNEL_ID
         )
             .setContentTitle("Position Tracker")
-            .setContentText(input)
+            .setContentText("Tracking rider")
             .setSmallIcon(R.drawable.ic_person_black_24dp)
             .setContentIntent(pendingIntent)
             .build()
@@ -110,13 +123,14 @@ class LocationService : Service() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
+            Toast.makeText(this,"Please give location permission!",Toast.LENGTH_SHORT).show()
             return super.onStartCommand(intent, flags, startId)
         }
         startForeground(1, notification)
-
+        lastLocation = null
         locationManager!!.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,
-            interval.toLong(),
+            0,
             0f,
             primaryListener
         )

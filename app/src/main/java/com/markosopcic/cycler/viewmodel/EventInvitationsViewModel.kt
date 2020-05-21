@@ -32,7 +32,7 @@ class EventInvitationsViewModel(private val cyclerAPI :CyclerAPI, val app: Appli
                  Toast.makeText(app,"Error while accepting request!",Toast.LENGTH_SHORT).show()
              }
              override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                 (invitationsRecyclerView.value?.adapter as FriendRequestsAdapter).removeItem(position)
+                 (invitationsRecyclerView.value?.adapter as EventInvitationsAdapter).removeItem(position)
              }
 
          })

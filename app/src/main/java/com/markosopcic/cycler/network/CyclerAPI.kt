@@ -1,5 +1,6 @@
 package com.markosopcic.cycler.network
 
+import com.markosopcic.cycler.network.forms.LocationModel
 import com.markosopcic.cycler.network.forms.LoginForm
 import com.markosopcic.cycler.network.models.EventInvitationResponse
 import com.markosopcic.cycler.network.models.FriendRequestResponse
@@ -31,4 +32,7 @@ interface CyclerAPI {
 
     @GET("/mobile/accept-invitation")
     fun acceptInvitation(@Query("InvitationId") invitationId : String, @Query("accept") accept: Boolean) : Call<Void>
+
+    @POST("/mobile/send-location")
+    fun sendLocation(@Body model : LocationModel) : Call<Void>
 }

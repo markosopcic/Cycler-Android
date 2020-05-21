@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.markosopcic.cycler.R
-import com.markosopcic.cycler.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment() {
 
@@ -16,7 +15,6 @@ class HomeFragment : Fragment() {
         fun newInstance() = HomeFragment()
     }
 
-    private lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,7 +25,6 @@ class HomeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

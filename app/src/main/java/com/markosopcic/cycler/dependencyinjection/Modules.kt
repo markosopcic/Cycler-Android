@@ -8,6 +8,7 @@ import com.markosopcic.cycler.network.interceptors.ReceivedCookiesInterceptor
 import com.markosopcic.cycler.utility.Constants
 import com.markosopcic.cycler.viewmodel.EventInvitationsViewModel
 import com.markosopcic.cycler.viewmodel.FriendRequestsViewModel
+import com.markosopcic.cycler.viewmodel.TrackingViewModel
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -40,6 +41,10 @@ val viewModelModule = module{
 
     single{
         EventInvitationsViewModel(get(),get())
+    }
+
+    single{
+        TrackingViewModel(get(),get())
     }
 }
 

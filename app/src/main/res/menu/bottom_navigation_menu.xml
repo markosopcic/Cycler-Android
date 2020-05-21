@@ -9,8 +9,8 @@
     <item
         android:id="@+id/invitationsTab"
         android:enabled="true"
-        android:title="Invitations"
-        android:icon="@drawable/ic_group_add_black_24dp"/>
+        android:title="Social"
+        android:icon="@drawable/ic_person_black_24dp"/>
     <item
         android:id="@+id/startTracking"
         android:enabled="true"
@@ -19,8 +19,8 @@
     <item
         android:id="@+id/friendsTab"
         android:enabled="true"
-        android:title="Friends"
-        android:icon="@drawable/ic_people_black_24dp"/>
+        android:title="Events"
+        android:icon="@drawable/ic_events_black_24dp"/>
     <item
         android:id="@+id/profile"
         android:enabled="true"
