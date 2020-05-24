@@ -1,14 +1,23 @@
 package com.markosopcic.cycler.view
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.markosopcic.cycler.R
+import com.markosopcic.cycler.network.CyclerAPI
+import com.markosopcic.cycler.network.forms.RegisterForm
 import kotlinx.android.synthetic.main.activity_register.*
+import org.koin.android.ext.android.get
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegisterActivity : AppCompatActivity() {
+
+    val cyclerAPI : CyclerAPI = get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +33,24 @@ class RegisterActivity : AppCompatActivity() {
             }else if(firstName.text.isEmpty() || lastName.text.isEmpty()){
                 Toast.makeText(this,"Please set your name!",Toast.LENGTH_LONG).show()
             }
+
+            val form = RegisterForm(firstName.text.toString(),lastName.text.toString(),password.text.toString(),confirmPassword.text.toString(),email.text.toString())
+            cyclerAPI.register(form).enqueue(object : Callback<Void> {
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Toast.makeText(this@RegisterActivity, "Something went wrong! Try again",Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if(!response.isSuccessful){
+                        Toast.makeText(this@RegisterActivity, "Something went wrong! Try again",Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(this@RegisterActivity, "Registration successful!",Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@RegisterActivity,LoginActivity::class.java))
+                        finish()
+                    }
+                }
+
+            })
         }
     }
 

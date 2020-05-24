@@ -1,8 +1,8 @@
 package com.markosopcic.cycler.network.interceptors
 
 import android.content.Context
-import com.markosopcic.cycler.utility.Constants.Companion.PREFERENCE_KEY
-import com.markosopcic.cycler.utility.Constants.Companion.PREFERENCE_NAME
+import com.markosopcic.cycler.utility.Constants.Companion.COOKIES_PREFERENCE_KEY
+import com.markosopcic.cycler.utility.Constants.Companion.COOKIES_PREFERENCE_NAME
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -12,8 +12,8 @@ class AddCookiesInterceptor(val context: Context) : Interceptor {
         val builder: Request.Builder = chain.request().newBuilder()
 
         val preferences =
-            context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE).getStringSet(
-                PREFERENCE_KEY,
+            context.getSharedPreferences(COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE).getStringSet(
+                COOKIES_PREFERENCE_KEY,
                 HashSet<String>()
             ) as HashSet<String>
 

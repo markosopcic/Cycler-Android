@@ -1,5 +1,6 @@
 package com.markosopcic.cycler.view
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.markosopcic.cycler.R
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.forms.LoginForm
+import com.markosopcic.cycler.network.models.LoginResponse
+import com.markosopcic.cycler.utility.Constants
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.ResponseBody
@@ -59,20 +62,29 @@ class LoginActivity : AppCompatActivity() {
                     password,
                     offset
                 )
-            ).enqueue(object : Callback<ResponseBody> {
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            ).enqueue(object : Callback<LoginResponse> {
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                     runOnUiThread { Toast.makeText(this@LoginActivity, "Invalid login", Toast.LENGTH_SHORT).show(); }
                 }
 
                 override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
+                    call: Call<LoginResponse>,
+                    response: Response<LoginResponse>
                 ) {
-                    runOnUiThread {
-                        Toast.makeText(this@LoginActivity, "Successful login!", Toast.LENGTH_SHORT).show()
-                        var intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                    if(response.isSuccessful) {
+                        getSharedPreferences(Constants.USER_PREFERENCE_KEY, Context.MODE_PRIVATE).edit().putString(Constants.USER_ID_KEY,response.body()?.userId).apply()
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Successful login!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            var intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                    }else{
+                        runOnUiThread { Toast.makeText(this@LoginActivity, "Invalid login", Toast.LENGTH_SHORT).show(); }
                     }
                 }
             })

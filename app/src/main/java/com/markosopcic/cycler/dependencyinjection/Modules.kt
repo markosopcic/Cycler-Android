@@ -1,6 +1,7 @@
 package com.markosopcic.cycler.dependencyinjection
 
 import android.content.Context
+import com.markosopcic.cycler.data.CyclerDatabase
 import com.markosopcic.cycler.network.CustomTrust
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.interceptors.AddCookiesInterceptor
@@ -32,6 +33,14 @@ val networkModule = module {
         provideRetrofitInstance(get()).create(CyclerAPI::class.java)
     }
 
+}
+
+
+val databaseModule = module{
+
+    single{
+        CyclerDatabase.getDatabase(get())
+    }
 }
 
 val viewModelModule = module{

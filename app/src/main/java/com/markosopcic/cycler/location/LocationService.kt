@@ -19,6 +19,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.markosopcic.cycler.R
+import com.markosopcic.cycler.data.CyclerDatabase
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.forms.LocationModel
 import com.markosopcic.cycler.view.MainActivity
@@ -32,18 +33,22 @@ import java.util.*
 
 class LocationService : Service() {
 
+
+    var database: CyclerDatabase = get()
     var cyclerAPI:CyclerAPI = get()
+
     private val mBinder: IBinder = LocationBinder()
+
+
     var liveTracking : Boolean = false
-    var locationListeners: MutableList<ILocationListener> =
-        ArrayList()
+    var eventTracking : Boolean = false
+
     var locationManager: LocationManager? = null
     var lastLocation: Location? = null
-    var listeners : List<ILocationListener> = listOf()
     private var primaryListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
             if (lastLocation != null) {
-                val p = 0.017453292519943295 // Math.PI / 180
+                val p = 0.017453292519943295
                 val a =
                     0.5 - Math.cos((location.latitude - lastLocation!!.latitude) * p) / 2 +
                             Math.cos(lastLocation!!.latitude * p) * Math.cos(location.latitude * p) *
@@ -83,21 +88,24 @@ class LocationService : Service() {
         return mBinder
     }
 
-    var task: Disposable? = null
     override fun onDestroy() {
-        if (task != null) {
-            task!!.dispose()
-        }
         locationManager!!.removeUpdates(primaryListener)
-        locationListeners.clear()
         stopForeground(true)
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (intent.action == "stop") {
+        if (intent.action == "pause") {
             onDestroy()
+            locationManager!!.removeUpdates(primaryListener)
             return super.onStartCommand(intent, flags, startId)
+        }else if(intent.action =="stop"){
+            onDestroy()
+            locationManager!!.removeUpdates(primaryListener)
+            return super.onStartCommand(intent, flags, startId)
+        }else if(intent.action == "resume"){
+
         }
+
         locationManager =
             getSystemService(Context.LOCATION_SERVICE) as LocationManager
         createNotificationChannel()
@@ -107,7 +115,7 @@ class LocationService : Service() {
             0, notificationIntent, 0
         )
         liveTracking = intent.getBooleanExtra("liveTracking",false)
-        val trackingId = intent.getStringExtra("trackingId")
+        eventTracking = intent.getBooleanExtra("eventTracking",false)
         val notification = NotificationCompat.Builder(
             this,
             CHANNEL_ID
@@ -147,7 +155,7 @@ class LocationService : Service() {
             val manager = getSystemService(
                 NotificationManager::class.java
             )
-            manager.createNotificationChannel(serviceChannel)
+            manager?.createNotificationChannel(serviceChannel)
         }
     }
 

@@ -85,7 +85,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    getSharedPreferences(Constants.PREFERENCE_NAME,Context.MODE_PRIVATE).getStringSet(Constants.PREFERENCE_KEY,null)?.clear()
+                    getSharedPreferences(Constants.COOKIES_PREFERENCE_NAME,Context.MODE_PRIVATE).getStringSet(Constants.COOKIES_PREFERENCE_KEY,null)?.clear()
+                    getSharedPreferences(Constants.USER_PREFERENCE_KEY,Context.MODE_PRIVATE).edit().putString(Constants.USER_ID_KEY,null).apply()
                     var intent = Intent(this@MainActivity, LoginActivity::class.java)
                     runOnUiThread{startActivity(intent)}
                     finish()
@@ -98,8 +99,8 @@ class MainActivity : AppCompatActivity() {
 
     fun isUserLoggedIn(): Boolean {
         val cookies =
-            getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE).getStringSet(
-                Constants.PREFERENCE_KEY,
+            getSharedPreferences(Constants.COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE).getStringSet(
+                Constants.COOKIES_PREFERENCE_KEY,
                 HashSet()
             ) as HashSet<String>?
 
