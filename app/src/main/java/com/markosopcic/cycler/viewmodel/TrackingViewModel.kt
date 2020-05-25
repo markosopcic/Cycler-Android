@@ -31,7 +31,7 @@ class TrackingViewModel(val cyclerAPI: CyclerAPI, application: Application) : An
     var trackingStatus = MutableLiveData<TrackingState>()
 
 
-    fun refreshActiveEvents(activity : Activity){
+    fun refreshActiveEvents(callback : (List<EventResponse>) -> Unit ){
         cyclerAPI.getActiveEvents().enqueue(object : Callback<List<EventResponse>>
             {
             override fun onFailure(call: Call<List<EventResponse>>, t: Throwable) {
@@ -48,14 +48,8 @@ class TrackingViewModel(val cyclerAPI: CyclerAPI, application: Application) : An
                     Toast.makeText(getApplication(),"Something went wrong! Try again!",Toast.LENGTH_SHORT).show()
                 }else{
                     events = response.body()
-                    val adapter = ActiveEventsAdapter(activity,events!!)
-                    adapter.updateData(events!!)
-                    val dialog = AlertDialog.Builder(activity).setAdapter(adapter) { _, which -> selectedEvent.value = events!![which] }.setTitle("Select event").setNegativeButton("Cancel"
-                    ) { _, _ -> eventTracking.value = false}.create()
-                    val listView = dialog.listView
-                    listView.divider =  ColorDrawable(Color.WHITE)
-                    listView.dividerHeight = 2
-                    dialog.show()
+                    callback.invoke(events!!)
+
                 }
             }
 

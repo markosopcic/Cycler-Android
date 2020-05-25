@@ -3,6 +3,8 @@ package com.markosopcic.cycler.view.fragments
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +16,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.markosopcic.cycler.R
 import com.markosopcic.cycler.location.LocationService
+import com.markosopcic.cycler.network.models.EventResponse
+import com.markosopcic.cycler.view.adapters.ActiveEventsAdapter
 import com.markosopcic.cycler.viewmodel.TrackingViewModel
 import kotlinx.android.synthetic.main.tracking_fragment.*
 import org.koin.android.ext.android.get
@@ -38,7 +42,7 @@ class TrackingFragment : Fragment() {
         trackEventSwitch.setOnClickListener {
             viewModel.eventTracking.value = (it as Switch).isChecked
             if(it.isChecked){
-                viewModel.refreshActiveEvents(activity as Activity)
+                viewModel.refreshActiveEvents(::displaySelectEvent)
             }
         }
 
@@ -104,6 +108,18 @@ class TrackingFragment : Fragment() {
                 context?.startService(intent)
             }
         }
+    }
+
+
+    fun displaySelectEvent(events : List<EventResponse>){
+        val adapter = ActiveEventsAdapter(activity as Activity,events)
+        adapter.updateData(events!!)
+        val dialog = AlertDialog.Builder(activity).setAdapter(adapter) { _, which -> viewModel.selectedEvent.value = events!![which] }.setTitle("Select event").setNegativeButton("Cancel"
+        ) { _, _ -> viewModel.eventTracking.value = false}.create()
+        val listView = dialog.listView
+        listView.divider =  ColorDrawable(Color.WHITE)
+        listView.dividerHeight = 2
+        dialog.show()
     }
 
     fun setupTrackingStart(){
