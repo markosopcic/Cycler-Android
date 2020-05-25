@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     var cyclerAPI = get<CyclerAPI>()
      lateinit var homeFragment : HomeFragment
-     lateinit var invitationsFragment: InvitationsFragment
+     lateinit var invitationsFragment: SocialFragment
      lateinit var trackingFragment : TrackingFragment
      lateinit var profileFragment: ProfileFragment
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.invitationsTab -> {
                     if (!::invitationsFragment.isInitialized){
-                        invitationsFragment = InvitationsFragment()
+                        invitationsFragment = SocialFragment()
                     }
                     supportFragmentManager.beginTransaction().replace(R.id.placeholder,invitationsFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
                     true

@@ -6,6 +6,7 @@ import com.markosopcic.cycler.network.forms.RegisterForm
 import com.markosopcic.cycler.network.models.*
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.http.*
 
 interface CyclerAPI {
@@ -40,4 +41,11 @@ interface CyclerAPI {
 
     @GET("/mobile/get-active-events")
     fun getActiveEvents() : Call<List<EventResponse>>
+
+    @GET("/mobile/profile/{userId}")
+    fun getUserProfile(@Path("userId") userId : String) : Call<UserDetails>
+
+    @GET("/mobile/SendFriendRequest/{friendId}")
+    fun sendFriendRequest(@Path("friendId") id : String) : Call<Void>
+
 }

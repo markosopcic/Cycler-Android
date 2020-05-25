@@ -11,7 +11,7 @@ import com.markosopcic.cycler.view.adapters.InvitationsPagerAdapter
 import kotlinx.android.synthetic.main.fragment_invitations.*
 
 
-class InvitationsFragment : Fragment() {
+class SocialFragment : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
