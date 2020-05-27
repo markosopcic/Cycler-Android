@@ -3,6 +3,7 @@ package com.markosopcic.cycler.utility
 class Constants {
 
     companion object {
+        //10.0.2.2 host of virtual device
         val ROOT_URL = "http://10.0.2.2/"
 
         val COOKIES_PREFERENCE_NAME = "CyclerPreferences"

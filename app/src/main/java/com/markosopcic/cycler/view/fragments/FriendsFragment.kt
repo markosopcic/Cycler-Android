@@ -95,7 +95,7 @@ class FriendsFragment : Fragment() {
             val callback : () -> Unit = {
                  -> it.isEnabled = false
                 if(details.friendshipRequestReceived){
-                    (it as Button).text = "You are already friends!"
+                    (it as Button).text = "You are now friends!"
                 }else{
                     (it as Button).text = "Friend request sent!"
                 }

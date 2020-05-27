@@ -2,10 +2,14 @@ package com.markosopcic.cycler.view.fragments
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +31,17 @@ class TrackingFragment : Fragment() {
 
 
     val viewModel = get<TrackingViewModel>()
+    val serviceConnection = object : ServiceConnection{
+        override fun onServiceDisconnected(name: ComponentName?) {
+            viewModel.mBound.value = false
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            viewModel.mBound.value = true
+            viewModel.mService = service as LocationService.LocationBinder?
+        }
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,13 +53,16 @@ class TrackingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        context?.bindService(Intent(context,LocationService::class.java),serviceConnection, Context.BIND_AUTO_CREATE)
         trackEventSwitch.setOnClickListener {
             viewModel.eventTracking.value = (it as Switch).isChecked
             if(it.isChecked){
                 viewModel.refreshActiveEvents(::displaySelectEvent)
             }
         }
+        viewModel.trackedTime.observe(viewLifecycleOwner, Observer {
+            trackingTimeTracker.text = it.toMinutes().toString().padStart(2,'0')+":"+((it.toMillis()/1000)%60).toString().padStart(2,'0')
+        })
 
         viewModel.selectedEvent.observe(viewLifecycleOwner, Observer {
             selected_event.text = it.name+"\n"+it.ownerName+"\n"+it.startTime
@@ -63,48 +81,45 @@ class TrackingFragment : Fragment() {
             viewModel.trackingActive.value = false
         }
 
-        stop_tracking_button.setOnClickListener{
-            Log.d("click","clack")
 
+        stop_tracking_button.setOnClickListener{
+            viewModel.StopTimeTracker(false)
             trackEventSwitch.isEnabled = true
             stop_tracking_button.isVisible = false
             startTrackingButton.setImageDrawable(resources.getDrawable(R.drawable.ic_start_tracking_outline_black_24dp))
             startTrackingButton.setBackgroundColor(resources.getColor(R.color.holo_green_dark))
             liveTrackingSwitch.isEnabled = true
             val intent = Intent(context,LocationService::class.java)
-            intent.action = "stop"
             viewModel.trackingStatus.value = TrackingViewModel.TrackingState.STOPPED
+            liveTrackingSwitch.isEnabled = true
+            viewModel.trackingActive.value = false
+            intent.action = "stop"
             context?.startService(intent)
+
+
         }
 
-        viewModel.trackingStatus.observe(viewLifecycleOwner, Observer {
-            Log.d("State",it.toString())
-        })
         startTrackingButton.setOnClickListener{
             if(!viewModel.trackingActive.value!!){
                 setupTrackingStart()
                 viewModel.trackingActive.value = true
                 val intent = Intent(context,LocationService::class.java)
                 if(viewModel.trackingStatus.value == TrackingViewModel.TrackingState.PAUSED){
-                    intent.action = "resume"
+                    viewModel.StartTracking(true)
                     viewModel.trackingStatus.value = TrackingViewModel.TrackingState.RESUMED
                 }else{
-                    intent.action = "start"
                     viewModel.trackingStatus.value = TrackingViewModel.TrackingState.STARTED
+                    viewModel.StartTracking(false)
                 }
 
-                intent.putExtra("liveTracking",liveTrackingSwitch.isChecked)
-                intent.putExtra("eventTracking",trackEventSwitch.isChecked)
-                if(trackEventSwitch.isChecked){
-                    intent.putExtra("trackedEventId",viewModel.selectedEvent.value?.id)
-                }
                 context?.startService(intent)
             }else{
                 viewModel.trackingActive.value = false
                 setupTrackingPause()
                 val intent = Intent(context,LocationService::class.java)
-                intent.action = "pause"
+                viewModel.StopTimeTracker(true)
                 viewModel.trackingStatus.value = TrackingViewModel.TrackingState.PAUSED
+                intent.action = "stop"
                 context?.startService(intent)
             }
         }

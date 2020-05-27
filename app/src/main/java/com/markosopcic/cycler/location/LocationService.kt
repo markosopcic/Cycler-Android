@@ -28,6 +28,10 @@ import org.koin.android.ext.android.get
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 
@@ -39,38 +43,12 @@ class LocationService : Service() {
 
     private val mBinder: IBinder = LocationBinder()
 
-
-    var liveTracking : Boolean = false
-    var eventTracking : Boolean = false
-
     var locationManager: LocationManager? = null
-    var lastLocation: Location? = null
+    var locationListener : ((Location) -> Unit)? = null
     private var primaryListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            if (lastLocation != null) {
-                val p = 0.017453292519943295
-                val a =
-                    0.5 - Math.cos((location.latitude - lastLocation!!.latitude) * p) / 2 +
-                            Math.cos(lastLocation!!.latitude * p) * Math.cos(location.latitude * p) *
-                            (1 - Math.cos((location.longitude - lastLocation!!.longitude) * p)) / 2
-                val d = 12742 * Math.asin(Math.sqrt(a)) * 1000
-                Log.d(
-                    "Position_debug",
-                    String.format("%.2f %f", d, location.accuracy)
-                )
-            }
-            if (lastLocation == null  || location.accuracy < lastLocation!!.accuracy || location.time > lastLocation!!.time)
-            {
-                lastLocation = location
-                cyclerAPI.sendLocation(LocationModel("x",location.longitude,location.latitude)).enqueue(object :
-                    Callback<Void> {
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                    }
+            locationListener?.invoke(location)
 
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    }
-                })
-            }
         }
 
         override fun onStatusChanged(
@@ -90,22 +68,16 @@ class LocationService : Service() {
 
     override fun onDestroy() {
         locationManager!!.removeUpdates(primaryListener)
+        locationListener = null
         stopForeground(true)
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (intent.action == "pause") {
+        if(intent.action == "stop"){
             onDestroy()
-            locationManager!!.removeUpdates(primaryListener)
+            stopSelf()
             return super.onStartCommand(intent, flags, startId)
-        }else if(intent.action =="stop"){
-            onDestroy()
-            locationManager!!.removeUpdates(primaryListener)
-            return super.onStartCommand(intent, flags, startId)
-        }else if(intent.action == "resume"){
-
         }
-
         locationManager =
             getSystemService(Context.LOCATION_SERVICE) as LocationManager
         createNotificationChannel()
@@ -114,8 +86,7 @@ class LocationService : Service() {
             this,
             0, notificationIntent, 0
         )
-        liveTracking = intent.getBooleanExtra("liveTracking",false)
-        eventTracking = intent.getBooleanExtra("eventTracking",false)
+
         val notification = NotificationCompat.Builder(
             this,
             CHANNEL_ID
@@ -135,7 +106,6 @@ class LocationService : Service() {
             return super.onStartCommand(intent, flags, startId)
         }
         startForeground(1, notification)
-        lastLocation = null
         locationManager!!.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,
             0,
@@ -163,6 +133,7 @@ class LocationService : Service() {
         val service: LocationService
             get() = this@LocationService
     }
+
 
     companion object {
         const val CHANNEL_ID = "ForegroundServiceChannel"

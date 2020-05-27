@@ -1,34 +1,98 @@
 package com.markosopcic.cycler.viewmodel
 
-import android.app.Activity
-import android.app.AlertDialog
 import android.app.Application
-import android.content.DialogInterface
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.view.WindowManager
-import android.widget.Adapter
+import android.location.Location
+import android.util.Log
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.markosopcic.cycler.location.ILocationListener
+import com.markosopcic.cycler.location.LocationService
 import com.markosopcic.cycler.network.CyclerAPI
+import com.markosopcic.cycler.network.forms.LocationModel
 import com.markosopcic.cycler.network.models.EventResponse
-import com.markosopcic.cycler.view.adapters.ActiveEventsAdapter
-import org.koin.android.ext.android.get
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+import java.util.concurrent.TimeUnit
 
 class TrackingViewModel(val cyclerAPI: CyclerAPI, application: Application) : AndroidViewModel(application){
 
     var trackingActive = MutableLiveData<Boolean>()
-    var onlineTracking = MutableLiveData<Boolean>()
-    var eventTracking =  MutableLiveData<Boolean>()
+    var onlineTracking = MutableLiveData<Boolean>(false)
+    var mBound  = MutableLiveData<Boolean>(false)
+    var mService : LocationService.LocationBinder? = null
+    var eventTracking =  MutableLiveData<Boolean>(false)
     var selectedEvent = MutableLiveData<EventResponse>()
     var events : List<EventResponse>? = null
     var trackingStatus = MutableLiveData<TrackingState>()
+    var trackedTime = MutableLiveData(Duration.ZERO)
+    var timeTrackerDisposable : Disposable? = null
+    var lastLocation : Location? = null
+    var lastUpdatedLocation : LocalDateTime = LocalDateTime.now()
+
+
+    fun StartTracking(resume : Boolean){
+        StartTimeTracker(resume)
+        mService?.service?.locationListener = ::ConsumeLocation
+    }
+
+    fun ConsumeLocation(location : Location){
+        if (lastLocation != null) {
+            val p = 0.017453292519943295
+            val a =
+                0.5 - Math.cos((location.latitude - lastLocation!!.latitude) * p) / 2 +
+                        Math.cos(lastLocation!!.latitude * p) * Math.cos(location.latitude * p) *
+                        (1 - Math.cos((location.longitude - lastLocation!!.longitude) * p)) / 2
+            val d = 12742 * Math.asin(Math.sqrt(a)) * 1000
+            Log.d(
+                "Position_debug",
+                String.format("%.2f %f", d, location.accuracy)
+            )
+        }
+        if (lastLocation == null  || location.accuracy < lastLocation!!.accuracy || location.time > lastLocation!!.time)
+        {
+            lastLocation = location
+            val updateOnlineStatus = ChronoUnit.SECONDS.between(lastUpdatedLocation,
+                LocalDateTime.now()) > 10
+            if(updateOnlineStatus){
+                lastUpdatedLocation = LocalDateTime.now()
+            }
+            val eventId = if(eventTracking.value!!)  selectedEvent.value?.id else null
+            cyclerAPI.sendLocation(LocationModel(eventId,location.longitude,location.latitude,updateOnlineStatus)).enqueue(object :
+                Callback<Void> {
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                }
+
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                }
+            })
+        }
+    }
+
+    fun StartTimeTracker(resume : Boolean){
+        if(!resume){
+            trackedTime.value = Duration.ZERO
+        }
+        timeTrackerDisposable = Observable.interval(0,1, TimeUnit.SECONDS)
+            .observeOn(AndroidSchedulers.mainThread()).subscribe {
+                trackedTime.value = trackedTime.value!!.plusSeconds(1)
+        }
+        }
+
+    fun StopTimeTracker(pause : Boolean){
+        timeTrackerDisposable?.dispose()
+        if(!pause){
+            trackedTime.value = Duration.ZERO
+        }
+
+    }
 
 
     fun refreshActiveEvents(callback : (List<EventResponse>) -> Unit ){
