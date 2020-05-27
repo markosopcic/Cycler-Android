@@ -36,7 +36,7 @@ class TrackingViewModel(val cyclerAPI: CyclerAPI, application: Application) : An
     var timeTrackerDisposable : Disposable? = null
     var lastLocation : Location? = null
     var lastUpdatedLocation : LocalDateTime = LocalDateTime.now()
-
+    var distanceMoved = MutableLiveData<Double>(0.0)
 
     fun StartTracking(resume : Boolean){
         StartTimeTracker(resume)
@@ -55,6 +55,12 @@ class TrackingViewModel(val cyclerAPI: CyclerAPI, application: Application) : An
                 "Position_debug",
                 String.format("%.2f %f", d, location.accuracy)
             )
+            if(distanceMoved.value == null)
+                distanceMoved.value = d
+            else{
+                distanceMoved.value = distanceMoved.value!! + d
+            }
+
         }
         if (lastLocation == null  || location.accuracy < lastLocation!!.accuracy || location.time > lastLocation!!.time)
         {
@@ -77,8 +83,10 @@ class TrackingViewModel(val cyclerAPI: CyclerAPI, application: Application) : An
     }
 
     fun StartTimeTracker(resume : Boolean){
+        lastLocation = null
         if(!resume){
             trackedTime.value = Duration.ZERO
+            distanceMoved.value = 0.0
         }
         timeTrackerDisposable = Observable.interval(0,1, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread()).subscribe {
@@ -90,7 +98,9 @@ class TrackingViewModel(val cyclerAPI: CyclerAPI, application: Application) : An
         timeTrackerDisposable?.dispose()
         if(!pause){
             trackedTime.value = Duration.ZERO
+            distanceMoved.value = 0.0
         }
+        lastLocation = null
 
     }
 

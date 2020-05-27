@@ -25,6 +25,8 @@ import com.markosopcic.cycler.view.adapters.ActiveEventsAdapter
 import com.markosopcic.cycler.viewmodel.TrackingViewModel
 import kotlinx.android.synthetic.main.tracking_fragment.*
 import org.koin.android.ext.android.get
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 
 class TrackingFragment : Fragment() {
@@ -80,6 +82,10 @@ class TrackingFragment : Fragment() {
         if(viewModel.trackingActive.value == null){
             viewModel.trackingActive.value = false
         }
+
+        viewModel.distanceMoved.observe(viewLifecycleOwner, Observer {
+            distanceMovedView.text = BigDecimal(it).setScale(2, RoundingMode.HALF_EVEN).toString()+"m"
+        })
 
 
         stop_tracking_button.setOnClickListener{
