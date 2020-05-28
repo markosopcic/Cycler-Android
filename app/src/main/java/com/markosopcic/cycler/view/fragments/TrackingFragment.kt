@@ -89,18 +89,17 @@ class TrackingFragment : Fragment() {
 
 
         stop_tracking_button.setOnClickListener{
-            viewModel.StopTimeTracker(false)
+
             trackEventSwitch.isEnabled = true
             stop_tracking_button.isVisible = false
             startTrackingButton.setImageDrawable(resources.getDrawable(R.drawable.ic_start_tracking_outline_black_24dp))
             startTrackingButton.setBackgroundColor(resources.getColor(R.color.holo_green_dark))
             liveTrackingSwitch.isEnabled = true
             val intent = Intent(context,LocationService::class.java)
-            viewModel.trackingStatus.value = TrackingViewModel.TrackingState.STOPPED
             liveTrackingSwitch.isEnabled = true
-            viewModel.trackingActive.value = false
             intent.action = "stop"
             context?.startService(intent)
+            viewModel.StopTracking()
 
 
         }
@@ -134,8 +133,8 @@ class TrackingFragment : Fragment() {
 
     fun displaySelectEvent(events : List<EventResponse>){
         val adapter = ActiveEventsAdapter(activity as Activity,events)
-        adapter.updateData(events!!)
-        val dialog = AlertDialog.Builder(activity).setAdapter(adapter) { _, which -> viewModel.selectedEvent.value = events!![which] }.setTitle("Select event").setNegativeButton("Cancel"
+        adapter.updateData(events)
+        val dialog = AlertDialog.Builder(activity).setAdapter(adapter) { _, which -> viewModel.selectedEvent.value = events[which] }.setTitle("Select event").setNegativeButton("Cancel"
         ) { _, _ -> viewModel.eventTracking.value = false}.create()
         val listView = dialog.listView
         listView.divider =  ColorDrawable(Color.WHITE)

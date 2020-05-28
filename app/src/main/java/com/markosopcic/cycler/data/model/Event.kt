@@ -6,4 +6,5 @@ import java.time.Instant
 import java.time.LocalDateTime
 
 @Entity
-data class Event(@PrimaryKey(autoGenerate = true) val localId : Int, val remoteId: String, val ownerId : String, val startTime : String, val name : String)
+data class Event(@PrimaryKey(autoGenerate = true) val localId : Long?, val remoteId: String?, val ownerId : String?, val startTime : Long, val name : String,
+                 var Duration : Long, var Meters : Long)

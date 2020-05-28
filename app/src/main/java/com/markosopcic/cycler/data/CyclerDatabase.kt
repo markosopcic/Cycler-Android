@@ -30,7 +30,7 @@ abstract class CyclerDatabase : RoomDatabase() {
                     context.applicationContext,
                     CyclerDatabase::class.java,
                     "cycler_database"
-                ).build()
+                ).allowMainThreadQueries().build()
                 INSTANCE = instance
                 return instance
             }

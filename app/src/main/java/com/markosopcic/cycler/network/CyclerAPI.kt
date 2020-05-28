@@ -1,5 +1,6 @@
 package com.markosopcic.cycler.network
 
+import com.markosopcic.cycler.network.forms.EventModel
 import com.markosopcic.cycler.network.forms.LocationModel
 import com.markosopcic.cycler.network.forms.LoginForm
 import com.markosopcic.cycler.network.forms.RegisterForm
@@ -47,5 +48,8 @@ interface CyclerAPI {
 
     @GET("/mobile/SendFriendRequest/{friendId}")
     fun sendFriendRequest(@Path("friendId") id : String) : Call<Void>
+
+    @POST("/mobile/upload-event")
+    fun uploadEventLocations(@Body model : EventModel) : Call<Void>
 
 }

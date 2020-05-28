@@ -54,7 +54,7 @@ val viewModelModule = module{
     }
 
     single{
-        TrackingViewModel(get(),get())
+        TrackingViewModel(get(),get(),get())
     }
     single{
         FriendsViewModel(get(),get())

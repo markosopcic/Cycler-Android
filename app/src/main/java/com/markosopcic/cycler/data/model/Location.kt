@@ -7,4 +7,4 @@ import java.time.LocalDateTime
 
 
 @Entity
-data class Location(@PrimaryKey(autoGenerate = true)val id : Int, val eventId : Int, val userId :String, val longitude : Double, val latitude : Double, val time : String)
+data class Location(@PrimaryKey(autoGenerate = true)val id : Long?, val eventId : Long, val userId :String, val longitude : Double, val latitude : Double, val time : Long)

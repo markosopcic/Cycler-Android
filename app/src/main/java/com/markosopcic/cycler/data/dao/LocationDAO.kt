@@ -13,7 +13,7 @@ interface LocationDAO {
         fun AddLocation(location : Location)
 
         @Query("select * from Location where eventId = :id")
-        fun GetLocationsForEvent(id: Int) : List<Location>
+        fun GetLocationsForEvent(id: Long) : List<Location>
 
         @Delete
         fun RemoveLocations(locations : List<Location>)
