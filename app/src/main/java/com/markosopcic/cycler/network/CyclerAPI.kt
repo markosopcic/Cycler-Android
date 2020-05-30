@@ -5,9 +5,7 @@ import com.markosopcic.cycler.network.forms.LocationModel
 import com.markosopcic.cycler.network.forms.LoginForm
 import com.markosopcic.cycler.network.forms.RegisterForm
 import com.markosopcic.cycler.network.models.*
-import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.http.*
 
 interface CyclerAPI {
@@ -20,36 +18,51 @@ interface CyclerAPI {
     fun searchUsers(@Query("term") term: String): Call<List<UserSearchResult>>
 
     @GET("/mobile/logout")
-    fun logout() : Call<Void>
+    fun logout(): Call<Void>
 
     @GET("/mobile/friend-requests")
-    fun getFriendRequests() : Call<List<FriendRequestResponse>>
+    fun getFriendRequests(): Call<List<FriendRequestResponse>>
 
     @GET("mobile/accept-friend-request")
-    fun acceptFriendRequest(@Query("fromUser") fromUserId:String,@Query("accept") accept:Boolean) : Call<Void>
+    fun acceptFriendRequest(
+        @Query("fromUser") fromUserId: String,
+        @Query("accept") accept: Boolean
+    ): Call<Void>
 
     @GET("/mobile/invitations")
-    fun getEventInvitations() : Call<List<EventInvitationResponse>>
+    fun getEventInvitations(): Call<List<EventInvitationResponse>>
 
     @GET("/mobile/accept-invitation")
-    fun acceptInvitation(@Query("InvitationId") invitationId : String, @Query("accept") accept: Boolean) : Call<Void>
+    fun acceptInvitation(
+        @Query("InvitationId") invitationId: String,
+        @Query("accept") accept: Boolean
+    ): Call<Void>
 
     @POST("/mobile/send-location")
-    fun sendLocation(@Body model : LocationModel) : Call<Void>
+    fun sendLocation(@Body model: LocationModel): Call<Void>
 
     @POST("/mobile/register")
-    fun register(@Body model : RegisterForm) : Call<Void>
+    fun register(@Body model: RegisterForm): Call<Void>
 
     @GET("/mobile/get-active-events")
-    fun getActiveEvents() : Call<List<EventResponse>>
+    fun getActiveEvents(): Call<List<EventResponse>>
 
     @GET("/mobile/profile/{userId}")
-    fun getUserProfile(@Path("userId") userId : String) : Call<UserDetails>
+    fun getUserProfile(@Path("userId") userId: String): Call<UserDetails>
 
     @GET("/mobile/SendFriendRequest/{friendId}")
-    fun sendFriendRequest(@Path("friendId") id : String) : Call<Void>
+    fun sendFriendRequest(@Path("friendId") id: String): Call<Void>
 
     @POST("/mobile/upload-event")
-    fun uploadEventLocations(@Body model : EventModel) : Call<Void>
+    fun uploadEventLocations(@Body model: EventModel): Call<Void>
+
+    @GET("/mobile/get-event-feed")
+    fun getEventFeed(
+        @Query("skip") skip: Int,
+        @Query("take") take: Int
+    ): Call<List<EventFeedResponse>>
+
+    @GET("/mobile/user-profile")
+    fun getUserProfile() : Call<UserProfileResponse>
 
 }

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
 
         <TextView
@@ -15,24 +14,27 @@
             android:layout_width="220dp"
             android:layout_height="30dp"
             android:visibility="invisible" />
+
         <TextView
             android:id="@+id/event_name"
             android:layout_width="220dp"
             android:layout_height="30dp"
             android:text="Trka"
             android:textSize="20sp" />
+
         <TextView
             android:id="@+id/event_description"
             android:layout_width="220dp"
             android:layout_height="30dp"
-            android:textSize="16sp"
-            android:layout_below="@id/event_invitation_sender_name"/>
+            android:layout_below="@id/event_invitation_sender_name"
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/event_invitation_sender_name"
             android:layout_width="220dp"
             android:layout_height="30dp"
-            android:text="Lorena Sopčić"
             android:layout_below="@id/event_name"
+            android:text="Lorena Sopčić"
             android:textSize="16sp" />
 
         <TextView

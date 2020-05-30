@@ -7,21 +7,22 @@
     <TextView
         android:id="@+id/event_picker_item_name"
         android:layout_width="match_parent"
-        android:textColor="@android:color/white"
         android:layout_height="25dp"
-        android:paddingStart="20dp"/>
+        android:paddingStart="20dp"
+        android:textColor="@android:color/white" />
+
     <TextView
         android:id="@+id/event_picker_item_owner_name"
         android:layout_width="match_parent"
-        android:textColor="@android:color/white"
         android:layout_height="25dp"
-        android:paddingStart="20dp"/>
+        android:paddingStart="20dp"
+        android:textColor="@android:color/white" />
 
 
     <TextView
         android:id="@+id/event_picker_item_start_time"
         android:layout_width="match_parent"
-        android:textColor="@android:color/white"
         android:layout_height="25dp"
-        android:paddingStart="20dp"/>
+        android:paddingStart="20dp"
+        android:textColor="@android:color/white" />
 </LinearLayout>

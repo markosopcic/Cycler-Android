@@ -12,10 +12,11 @@ class AddCookiesInterceptor(val context: Context) : Interceptor {
         val builder: Request.Builder = chain.request().newBuilder()
 
         val preferences =
-            context.getSharedPreferences(COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE).getStringSet(
-                COOKIES_PREFERENCE_KEY,
-                HashSet<String>()
-            ) as HashSet<String>
+            context.getSharedPreferences(COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE)
+                .getStringSet(
+                    COOKIES_PREFERENCE_KEY,
+                    HashSet<String>()
+                ) as HashSet<String>
 
         for (cookie in preferences) {
             builder.addHeader("Cookie", cookie)

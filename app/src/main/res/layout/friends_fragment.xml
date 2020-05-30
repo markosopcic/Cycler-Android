@@ -18,9 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/people_search"
-        android:layout_marginBottom="100dp"
         android:layout_gravity="top"
-        tools:listitem="@layout/user_recycler_item"
-        />
+        android:layout_marginBottom="100dp"
+        tools:listitem="@layout/user_recycler_item" />
 
 </RelativeLayout>

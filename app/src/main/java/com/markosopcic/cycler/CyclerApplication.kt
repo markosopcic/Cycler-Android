@@ -15,7 +15,7 @@ class CyclerApplication : Application() {
         startKoin {
             androidLogger(Level.DEBUG)
             androidContext(this@CyclerApplication)
-            modules(listOf(networkModule,viewModelModule, databaseModule))
+            modules(listOf(networkModule, viewModelModule, databaseModule))
         }
     }
 }

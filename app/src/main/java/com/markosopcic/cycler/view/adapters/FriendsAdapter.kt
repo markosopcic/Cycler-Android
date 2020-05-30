@@ -8,23 +8,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.markosopcic.cycler.R
 import com.markosopcic.cycler.network.models.UserSearchResult
 
-class FriendsAdapter(var onClickUser : ((String) -> Unit)?) : RecyclerView.Adapter<FriendsAdapter.UserViewHolder>(){
+class FriendsAdapter(var onClickUser: ((String) -> Unit)?) :
+    RecyclerView.Adapter<FriendsAdapter.UserViewHolder>() {
 
-    private var users:MutableList<UserSearchResult> = mutableListOf()
+    private var users: MutableList<UserSearchResult> = mutableListOf()
 
-    class UserViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val user_name = itemView.findViewById<TextView>(R.id.user_item_name)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.user_recycler_item,parent,false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.user_recycler_item, parent, false)
         return UserViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val currentItem = users[position]
         holder.user_name.text = currentItem.fullName
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
             onClickUser!!(currentItem.id)
         }
     }

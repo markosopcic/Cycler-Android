@@ -11,7 +11,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.markosopcic.cycler.R
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.utility.Constants
-import com.markosopcic.cycler.view.fragments.*
+import com.markosopcic.cycler.view.fragments.HomeFragment
+import com.markosopcic.cycler.view.fragments.ProfileFragment
+import com.markosopcic.cycler.view.fragments.SocialFragment
+import com.markosopcic.cycler.view.fragments.TrackingFragment
 import org.koin.android.ext.android.get
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,11 +23,10 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    var cyclerAPI = get<CyclerAPI>()
-     lateinit var homeFragment : HomeFragment
-     lateinit var invitationsFragment: SocialFragment
-     lateinit var trackingFragment : TrackingFragment
-     lateinit var profileFragment: ProfileFragment
+    lateinit var homeFragment: HomeFragment
+    lateinit var invitationsFragment: SocialFragment
+    lateinit var trackingFragment: TrackingFragment
+    lateinit var profileFragment: ProfileFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,34 +38,42 @@ class MainActivity : AppCompatActivity() {
         }
         var bottomNavigationView = findViewById(R.id.bottom_navigation) as BottomNavigationView
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            when(item.itemId) {
+            when (item.itemId) {
                 R.id.homeButton -> {
-                    if (!::homeFragment.isInitialized){
+                    if (!::homeFragment.isInitialized) {
                         homeFragment = HomeFragment()
                     }
-                    supportFragmentManager.beginTransaction().replace(R.id.placeholder,homeFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.placeholder, homeFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
                     true
                 }
                 R.id.invitationsTab -> {
-                    if (!::invitationsFragment.isInitialized){
+                    if (!::invitationsFragment.isInitialized) {
                         invitationsFragment = SocialFragment()
                     }
-                    supportFragmentManager.beginTransaction().replace(R.id.placeholder,invitationsFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.placeholder, invitationsFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
                     true
                 }
                 R.id.profile -> {
-                    if (!::profileFragment.isInitialized){
+                    if (!::profileFragment.isInitialized) {
                         profileFragment = ProfileFragment()
                     }
-                    supportFragmentManager.beginTransaction().replace(R.id.placeholder,profileFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.placeholder, profileFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
 
                     true
                 }
                 R.id.startTracking -> {
-                    if (!::trackingFragment.isInitialized){
+                    if (!::trackingFragment.isInitialized) {
                         trackingFragment = TrackingFragment()
                     }
-                    supportFragmentManager.beginTransaction().replace(R.id.placeholder,trackingFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.placeholder, trackingFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
                     true
                 }
                 else -> false
@@ -71,35 +81,26 @@ class MainActivity : AppCompatActivity() {
 
 
         }
+
+        if (!::homeFragment.isInitialized) {
+            homeFragment = HomeFragment()
+        }
+        supportFragmentManager.beginTransaction().replace(R.id.placeholder, homeFragment)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
         val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
-        ActivityCompat.requestPermissions(this, permissions,0)
+        ActivityCompat.requestPermissions(this, permissions, 0)
 
 
     }
 
-    fun logout(): Unit{
-        Thread {
-            var response = cyclerAPI.logout().enqueue(object : Callback<Void>{
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Toast.makeText(this@MainActivity,"Something has gone wrong! Try again later.",Toast.LENGTH_SHORT).show()
-                }
 
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    getSharedPreferences(Constants.COOKIES_PREFERENCE_NAME,Context.MODE_PRIVATE).getStringSet(Constants.COOKIES_PREFERENCE_KEY,null)?.clear()
-                    getSharedPreferences(Constants.USER_PREFERENCE_KEY,Context.MODE_PRIVATE).edit().putString(Constants.USER_ID_KEY,null).apply()
-                    var intent = Intent(this@MainActivity, LoginActivity::class.java)
-                    runOnUiThread{startActivity(intent)}
-                    finish()
-                }
-
-            })
-        }.start()
-
-    }
 
     fun isUserLoggedIn(): Boolean {
         val cookies =
-            getSharedPreferences(Constants.COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE).getStringSet(
+            getSharedPreferences(
+                Constants.COOKIES_PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+            ).getStringSet(
                 Constants.COOKIES_PREFERENCE_KEY,
                 HashSet()
             ) as HashSet<String>?

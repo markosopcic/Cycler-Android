@@ -14,10 +14,11 @@ class ReceivedCookiesInterceptor(val context: Context) : Interceptor {
         val originalResponse = chain.proceed(chain.request())
         if (!originalResponse.headers("Set-Cookie").isEmpty()) {
             val cookies =
-                context.getSharedPreferences(COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE).getStringSet(
-                    COOKIES_PREFERENCE_KEY,
-                    HashSet()
-                ) as HashSet<String>?
+                context.getSharedPreferences(COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE)
+                    .getStringSet(
+                        COOKIES_PREFERENCE_KEY,
+                        HashSet()
+                    ) as HashSet<String>?
 
             for (header in originalResponse.headers("Set-Cookie")) {
                 cookies!!.add(header)

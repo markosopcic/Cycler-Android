@@ -6,12 +6,9 @@ import com.markosopcic.cycler.network.CustomTrust
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.interceptors.AddCookiesInterceptor
 import com.markosopcic.cycler.network.interceptors.ReceivedCookiesInterceptor
+import com.markosopcic.cycler.network.models.RegisterViewModel
 import com.markosopcic.cycler.utility.Constants
-import com.markosopcic.cycler.viewmodel.EventInvitationsViewModel
-import com.markosopcic.cycler.viewmodel.FriendRequestsViewModel
-import com.markosopcic.cycler.viewmodel.FriendsViewModel
-import com.markosopcic.cycler.viewmodel.TrackingViewModel
-import okhttp3.OkHttpClient
+import com.markosopcic.cycler.viewmodel.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -37,27 +34,43 @@ val networkModule = module {
 }
 
 
-val databaseModule = module{
+val databaseModule = module {
 
-    single{
+    single {
         CyclerDatabase.getDatabase(get())
     }
 }
 
-val viewModelModule = module{
-    single{
-        FriendRequestsViewModel(get(),get())
+val viewModelModule = module {
+    single {
+        FriendRequestsViewModel(get(), get())
+    }
+
+    single {
+        EventInvitationsViewModel(get(), get())
+    }
+
+    single {
+        TrackingViewModel(get(), get(), get())
+    }
+    single {
+        FriendsViewModel(get(), get())
+    }
+
+    single {
+        HomeViewModel(get(), get())
+    }
+
+    single {
+        LoginViewModel(get(), get())
     }
 
     single{
-        EventInvitationsViewModel(get(),get())
+        ProfileViewModel(get(),get())
     }
 
     single{
-        TrackingViewModel(get(),get(),get())
-    }
-    single{
-        FriendsViewModel(get(),get())
+        RegisterViewModel(get(),get())
     }
 }
 

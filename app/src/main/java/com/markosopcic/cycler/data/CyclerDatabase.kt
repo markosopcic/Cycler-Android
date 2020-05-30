@@ -9,7 +9,7 @@ import com.markosopcic.cycler.data.dao.LocationDAO
 import com.markosopcic.cycler.data.model.Event
 import com.markosopcic.cycler.data.model.Location
 
-@Database(version = 1, entities = arrayOf(Event::class,Location::class), exportSchema = false)
+@Database(version = 1, entities = arrayOf(Event::class, Location::class), exportSchema = false)
 abstract class CyclerDatabase : RoomDatabase() {
 
     abstract fun eventDao(): EventDAO

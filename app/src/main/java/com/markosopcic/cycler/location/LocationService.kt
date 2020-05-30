@@ -15,36 +15,19 @@ import android.os.Binder
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.markosopcic.cycler.R
-import com.markosopcic.cycler.data.CyclerDatabase
-import com.markosopcic.cycler.network.CyclerAPI
-import com.markosopcic.cycler.network.forms.LocationModel
 import com.markosopcic.cycler.view.MainActivity
-import io.reactivex.disposables.Disposable
-import org.koin.android.ext.android.get
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
-import java.util.*
 
 
 class LocationService : Service() {
 
 
-    var database: CyclerDatabase = get()
-    var cyclerAPI:CyclerAPI = get()
-
     private val mBinder: IBinder = LocationBinder()
 
     var locationManager: LocationManager? = null
-    var locationListener : ((Location) -> Unit)? = null
+    var locationListener: ((Location) -> Unit)? = null
     private var primaryListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
             locationListener?.invoke(location)
@@ -67,13 +50,14 @@ class LocationService : Service() {
     }
 
     override fun onDestroy() {
-        locationManager!!.removeUpdates(primaryListener)
+        locationManager?.removeUpdates(primaryListener)
         locationListener = null
         stopForeground(true)
+
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if(intent.action == "stop"){
+        if (intent.action == "stop") {
             onDestroy()
             stopSelf()
             return super.onStartCommand(intent, flags, startId)
@@ -102,7 +86,7 @@ class LocationService : Service() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(this,"Please give location permission!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please give location permission!", Toast.LENGTH_SHORT).show()
             return super.onStartCommand(intent, flags, startId)
         }
         startForeground(1, notification)

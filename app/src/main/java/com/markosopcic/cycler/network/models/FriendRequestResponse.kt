@@ -6,5 +6,5 @@ data class FriendRequestResponse(
     val id: String,
     val sender: String,
     val senderName: String,
-    val timeSent: Date
+    val timeSent: String
 )

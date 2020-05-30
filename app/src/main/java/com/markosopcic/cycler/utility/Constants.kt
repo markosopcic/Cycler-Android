@@ -11,5 +11,7 @@ class Constants {
 
         val USER_PREFERENCE_KEY = "USER_DATA"
         val USER_ID_KEY = "UserId"
+
+        val FEED_PAGE_SIZE = 10
     }
 }

@@ -17,7 +17,7 @@ import java.util.*
 class FriendRequestsFragment : Fragment() {
 
 
-    private  var viewModel = get<FriendRequestsViewModel>()
+    private var viewModel = get<FriendRequestsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,24 +27,17 @@ class FriendRequestsFragment : Fragment() {
         invitations_recycler_view.layoutManager = manager
         val adapter = FriendRequestsAdapter(ArrayList<FriendRequestResponse>())
         invitations_recycler_view.adapter = adapter
-        viewModel.invitationsRecyclerView.value = invitations_recycler_view
         viewModel.refreshFriendRequests()
         adapter.onAcceptRequest = viewModel::acceptRequest
 
+        viewModel.invitations.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            adapter.changeDataset(it)
+        })
+
 
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,8 +47,5 @@ class FriendRequestsFragment : Fragment() {
         return inflater.inflate(R.layout.friend_requests_fragment, container, false)
     }
 
-    fun refreshRequests(){
-        viewModel.refreshFriendRequests()
-    }
 
 }

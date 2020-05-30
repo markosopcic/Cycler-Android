@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragments.TrackingFragment">
 
     <Switch
@@ -52,14 +51,14 @@
     <ImageButton
         android:id="@+id/stop_tracking_button"
         android:layout_width="100dp"
-        android:visibility="invisible"
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="489dp"
         android:layout_marginEnd="100dp"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_stop_tracking_24dp" />
+        android:src="@drawable/ic_stop_tracking_24dp"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/trackingTimeTracker"

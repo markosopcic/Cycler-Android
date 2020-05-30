@@ -7,15 +7,15 @@ import com.markosopcic.cycler.data.model.Event
 interface EventDAO {
 
     @Insert
-    fun addEvent(event : Event) : Long
+    fun addEvent(event: Event): Long
 
     @Delete
-    fun deleteEvent(event : Event)
+    fun deleteEvent(event: Event)
 
     @Query("select * from event where localId = :id")
-    fun getEventById(id : Long) : Event
+    fun getEventById(id: Long): Event
 
     @Update
-    fun updateEvent(event : Event)
+    fun updateEvent(event: Event)
 
 }
