@@ -11,10 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.markosopcic.cycler.R
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.utility.Constants
-import com.markosopcic.cycler.view.fragments.HomeFragment
-import com.markosopcic.cycler.view.fragments.ProfileFragment
-import com.markosopcic.cycler.view.fragments.SocialFragment
-import com.markosopcic.cycler.view.fragments.TrackingFragment
+import com.markosopcic.cycler.view.fragments.*
 import org.koin.android.ext.android.get
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var invitationsFragment: SocialFragment
     lateinit var trackingFragment: TrackingFragment
     lateinit var profileFragment: ProfileFragment
+    lateinit var eventsFragment : EventsFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -73,6 +71,16 @@ class MainActivity : AppCompatActivity() {
                     }
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.placeholder, trackingFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+                    true
+                }
+
+                R.id.eventsTab -> {
+                    if(!::eventsFragment.isInitialized){
+                        eventsFragment = EventsFragment()
+                    }
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.placeholder, eventsFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
                     true
                 }

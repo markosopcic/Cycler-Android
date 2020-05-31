@@ -17,7 +17,7 @@
         android:icon="@drawable/ic_local_hospital_black_24dp"
         android:title="Start Ride" />
     <item
-        android:id="@+id/friendsTab"
+        android:id="@+id/eventsTab"
         android:enabled="true"
         android:icon="@drawable/ic_events_black_24dp"
         android:title="Events" />

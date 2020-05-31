@@ -73,7 +73,6 @@ class FriendsFragment : Fragment() {
     }
 
     fun showUserDetails(details: UserDetails) {
-        Log.d("details", details.fullName)
         val dialog = AlertDialog.Builder(activity)
         val view = activity?.layoutInflater?.inflate(R.layout.user_profile_dialog, null)
         dialog.setView(view)

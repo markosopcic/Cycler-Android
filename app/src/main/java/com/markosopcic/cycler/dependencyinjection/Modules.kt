@@ -7,6 +7,7 @@ import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.interceptors.AddCookiesInterceptor
 import com.markosopcic.cycler.network.interceptors.ReceivedCookiesInterceptor
 import com.markosopcic.cycler.network.models.RegisterViewModel
+import com.markosopcic.cycler.network.models.UserEventViewResponse
 import com.markosopcic.cycler.utility.Constants
 import com.markosopcic.cycler.viewmodel.*
 import org.koin.android.ext.koin.androidContext
@@ -71,6 +72,14 @@ val viewModelModule = module {
 
     single{
         RegisterViewModel(get(),get())
+    }
+
+    single{
+        EventViewViewModel(get(),get())
+    }
+
+    single{
+        NewEventViewModel(get(),get())
     }
 }
 

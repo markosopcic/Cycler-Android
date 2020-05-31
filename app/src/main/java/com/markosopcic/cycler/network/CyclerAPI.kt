@@ -1,9 +1,6 @@
 package com.markosopcic.cycler.network
 
-import com.markosopcic.cycler.network.forms.EventModel
-import com.markosopcic.cycler.network.forms.LocationModel
-import com.markosopcic.cycler.network.forms.LoginForm
-import com.markosopcic.cycler.network.forms.RegisterForm
+import com.markosopcic.cycler.network.forms.*
 import com.markosopcic.cycler.network.models.*
 import retrofit2.Call
 import retrofit2.http.*
@@ -64,5 +61,14 @@ interface CyclerAPI {
 
     @GET("/mobile/user-profile")
     fun getUserProfile() : Call<UserProfileResponse>
+
+    @GET("/mobile/get-user-events")
+    fun getUserEvents(@Query("skip") skip : Int , @Query("take") take : Int) : Call<List<UserEventViewResponse>>
+
+    @GET("/mobile/get-friends")
+    fun getFriends() : Call<List<FriendResult>>
+
+    @POST("/mobile/create-event")
+    fun createEvent(@Body form : CreateEventForm): Call<Void>
 
 }

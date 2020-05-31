@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
 import android.os.Bundle
 import android.os.IBinder
 import android.view.LayoutInflater
@@ -38,8 +39,8 @@ class TrackingFragment : Fragment() {
         }
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            viewModel.mBound.value = true
             viewModel.mService = service as LocationService.LocationBinder?
+            viewModel.mBound.value = true
         }
 
     }
@@ -60,6 +61,12 @@ class TrackingFragment : Fragment() {
                 viewModel.refreshActiveEvents(::displaySelectEvent)
             }
         }
+
+        viewModel.mBound.observe(viewLifecycleOwner, Observer {
+            if(it){
+                viewModel.mService!!.service.locationListener = ::consumeLocation
+            }
+        })
 
         liveTrackingSwitch.setOnClickListener {
             viewModel.onlineTracking.value = (it as Switch).isChecked
@@ -145,6 +152,10 @@ class TrackingFragment : Fragment() {
                 context?.startService(intent)
             }
         }
+    }
+
+    fun consumeLocation(loc : Location){
+        viewModel.ConsumeLocation(loc)
     }
 
 

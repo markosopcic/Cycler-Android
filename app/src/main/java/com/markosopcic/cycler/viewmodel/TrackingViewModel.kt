@@ -49,6 +49,7 @@ class TrackingViewModel(
     var distanceMoved = MutableLiveData(0.0)
     var currentEventId: Long? = null
 
+
     fun StartTracking(resume: Boolean) {
         StartTimeTracker(resume)
         mService?.service?.locationListener = ::ConsumeLocation
@@ -141,13 +142,8 @@ class TrackingViewModel(
     }
 
     fun ConsumeLocation(location: Location) {
-        if (false) {//ChronoUnit.SECONDS.between(lastLocationTime,LocalDateTime.now())  < 1){
-            return
-        } else {
-            lastLocationTime = LocalDateTime.now()
-        }
         if (lastLocation != null) {
-            addLocationToDatabase(location)
+
 
 
             val p = 0.017453292519943295
@@ -156,10 +152,13 @@ class TrackingViewModel(
                         Math.cos(lastLocation!!.latitude * p) * Math.cos(location.latitude * p) *
                         (1 - Math.cos((location.longitude - lastLocation!!.longitude) * p)) / 2
             val d = 12742 * Math.asin(Math.sqrt(a)) * 1000
-            Log.d(
-                "Position_debug",
-                String.format("%.2f %f", d, location.accuracy)
-            )
+
+            if(d ==  0.0){
+                return
+            }
+            addLocationToDatabase(location)
+
+
             if (distanceMoved.value == null)
                 distanceMoved.value = d
             else {
@@ -180,6 +179,11 @@ class TrackingViewModel(
 
             if (onlineTracking.value!!) {
                 val eventId = if (eventTracking.value!!) selectedEvent.value?.id else null
+                if (ChronoUnit.SECONDS.between(lastLocationTime,LocalDateTime.now())  < 1){
+                    return
+                } else {
+                    lastLocationTime = LocalDateTime.now()
+                }
                 cyclerAPI.sendLocation(
                     LocationModel(
                         eventId,
