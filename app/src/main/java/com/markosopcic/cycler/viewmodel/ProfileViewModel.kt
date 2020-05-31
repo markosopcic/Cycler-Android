@@ -92,7 +92,7 @@ class ProfileViewModel(val cyclerAPI: CyclerAPI,val cyclerDatabase: CyclerDataba
 
     fun logout(callback : (() -> Unit)){
         app.getSharedPreferences(Constants.USER_PREFERENCE_KEY, Context.MODE_PRIVATE).edit().remove(Constants.USER_ID_KEY).apply()
-        app.getSharedPreferences(Constants.COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE).edit().remove(Constants.COOKIES_PREFERENCE_KEY).apply()
+        app.getSharedPreferences(Constants.COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.COOKIES_PREFERENCE_KEY,null).apply()
         cyclerAPI.logout().enqueue(object : Callback<Void>{
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 callback.invoke()

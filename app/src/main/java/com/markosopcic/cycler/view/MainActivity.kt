@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
             getSharedPreferences(Constants.COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE)
                 .getString(Constants.COOKIES_PREFERENCE_KEY,null)
 
-        return cookie != null
+        return cookie != null && cookie.isNotEmpty()
 
     }
 }
