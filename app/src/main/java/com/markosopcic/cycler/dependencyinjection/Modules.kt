@@ -10,10 +10,13 @@ import com.markosopcic.cycler.network.models.RegisterViewModel
 import com.markosopcic.cycler.network.models.UserEventViewResponse
 import com.markosopcic.cycler.utility.Constants
 import com.markosopcic.cycler.viewmodel.*
+import com.microsoft.signalr.HubConnectionBuilder
+import io.reactivex.Single
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.HashSet
 
 val networkModule = module {
 
@@ -32,7 +35,9 @@ val networkModule = module {
         provideRetrofitInstance(get()).create(CyclerAPI::class.java)
     }
 
+
 }
+
 
 
 val databaseModule = module {
@@ -67,7 +72,7 @@ val viewModelModule = module {
     }
 
     single{
-        ProfileViewModel(get(),get())
+        ProfileViewModel(get(),get(),get())
     }
 
     single{

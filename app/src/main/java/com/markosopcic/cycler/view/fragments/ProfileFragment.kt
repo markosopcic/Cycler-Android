@@ -25,10 +25,19 @@ class ProfileFragment : Fragment() {
         return inflater.inflate(R.layout.profile_fragment, container, false)
     }
 
+    fun enableUploadButton(){
+     upload_button.isEnabled = true
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        upload_button.setOnClickListener {
+            it.isEnabled = false
+            viewModel.uploadAllEvents(::enableUploadButton)
+        }
 
         logout_button.setOnClickListener {
             viewModel.logout(::onLogout)

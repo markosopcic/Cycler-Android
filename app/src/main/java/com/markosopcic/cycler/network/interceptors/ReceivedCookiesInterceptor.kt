@@ -13,21 +13,16 @@ class ReceivedCookiesInterceptor(val context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalResponse = chain.proceed(chain.request())
         if (!originalResponse.headers("Set-Cookie").isEmpty()) {
-            val cookies =
-                context.getSharedPreferences(COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE)
-                    .getStringSet(
-                        COOKIES_PREFERENCE_KEY,
-                        HashSet()
-                    ) as HashSet<String>?
-
+            var  cookie = ""
             for (header in originalResponse.headers("Set-Cookie")) {
-                cookies!!.add(header)
+                if(header.startsWith("Identity")){
+                    cookie = header
+                }
             }
 
             val memes =
                 context.getSharedPreferences(COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE).edit()
-            memes.putStringSet("PREF_COOKIES", cookies).apply()
-            memes.commit()
+            memes.putString(COOKIES_PREFERENCE_KEY, cookie).apply()
         }
         return originalResponse
     }

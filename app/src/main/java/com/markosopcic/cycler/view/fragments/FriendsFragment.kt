@@ -84,7 +84,11 @@ class FriendsFragment : Fragment() {
         view?.findViewById<TextView>(R.id.user_details_friends_num)?.text =
             "Friends: " + details.numOfFriends
         val button = view?.findViewById<Button>(R.id.user_details_send_friend_request_button)
-        if (details.friendshipRequestReceived) {
+        if(details.isFriend){
+            button?.text = "Already friends!"
+            button?.isEnabled = false
+        }
+        else if (details.friendshipRequestReceived) {
             button?.text = "Accept friend request"
         } else if (details.friendshipRequestSent) {
             button?.isEnabled = false

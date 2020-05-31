@@ -104,16 +104,11 @@ class MainActivity : AppCompatActivity() {
 
 
     fun isUserLoggedIn(): Boolean {
-        val cookies =
-            getSharedPreferences(
-                Constants.COOKIES_PREFERENCE_NAME,
-                Context.MODE_PRIVATE
-            ).getStringSet(
-                Constants.COOKIES_PREFERENCE_KEY,
-                HashSet()
-            ) as HashSet<String>?
+        val cookie =
+            getSharedPreferences(Constants.COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE)
+                .getString(Constants.COOKIES_PREFERENCE_KEY,null)
 
-        return cookies != null && cookies.size > 0
+        return cookie != null
 
     }
 }

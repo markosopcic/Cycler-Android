@@ -16,6 +16,8 @@ import com.markosopcic.cycler.network.forms.EventModel
 import com.markosopcic.cycler.network.forms.LocationModel
 import com.markosopcic.cycler.network.models.EventResponse
 import com.markosopcic.cycler.utility.Constants
+import com.microsoft.signalr.HubConnection
+import com.microsoft.signalr.HubConnectionState
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -175,6 +177,7 @@ class TrackingViewModel(
             if (updateOnlineStatus) {
                 lastUpdatedLocation = LocalDateTime.now()
             }
+
 
 
             if (onlineTracking.value!!) {

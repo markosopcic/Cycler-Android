@@ -18,4 +18,7 @@ interface EventDAO {
     @Update
     fun updateEvent(event: Event)
 
+    @Query("select *from event")
+    fun getAllEvents() : List<Event>
+
 }
