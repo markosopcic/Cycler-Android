@@ -3,7 +3,8 @@ package com.markosopcic.cycler.utility
 class Constants {
 
     companion object {
-        //10.0.2.2 host of virtual device
+        // host of virtual device
+        //val ROOT_URL = "http://10.0.2.2"
         val ROOT_URL = "https://cycler.hopto.org"
 
 

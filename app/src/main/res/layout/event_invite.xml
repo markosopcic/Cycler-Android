@@ -39,9 +39,10 @@
 
         <TextView
             android:id="@+id/event_invitation_start_time"
-            android:layout_width="260dp"
-            android:layout_height="30dp"
+            android:layout_width="363dp"
+            android:layout_height="32dp"
             android:layout_below="@+id/event_description"
+            android:layout_marginTop="-1dp"
             android:text="2020-12-30" />
 
         <ImageButton

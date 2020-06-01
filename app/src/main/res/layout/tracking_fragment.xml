@@ -41,8 +41,8 @@
 
     <TextView
         android:id="@+id/selected_event"
-        android:layout_width="167dp"
-        android:layout_height="50dp"
+        android:layout_width="235dp"
+        android:layout_height="55dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="300dp"

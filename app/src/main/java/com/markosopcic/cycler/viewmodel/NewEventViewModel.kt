@@ -49,7 +49,7 @@ class NewEventViewModel(val cyclerAPI: CyclerAPI,val app : Application) : Androi
                }else{
                    eventName.value = null
                    eventDescription.value = null
-                   selectedFriends.value = null
+                   selectedFriends.value = mutableListOf()
                    startTime.value = null
                    Toast.makeText(app,"Event created successfully!",Toast.LENGTH_SHORT).show()
                    callback.invoke()

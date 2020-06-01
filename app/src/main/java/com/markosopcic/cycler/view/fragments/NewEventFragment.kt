@@ -47,6 +47,7 @@ class NewEventFragment : Fragment(){
             viewModel.createEvent(::resetView)
         }
 
+
         viewModel.selectedFriends.value = mutableListOf()
 
         new_event_add_friends_button.setOnClickListener {
@@ -72,6 +73,9 @@ class NewEventFragment : Fragment(){
 
     fun resetView(){
         new_event_selected_start_time.text = ""
+        new_event_description.setText("")
+        new_event_name.setText("")
+
     }
 
     fun showDateTimePicker() {

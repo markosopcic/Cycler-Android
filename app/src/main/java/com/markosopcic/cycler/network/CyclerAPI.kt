@@ -71,4 +71,7 @@ interface CyclerAPI {
     @POST("/mobile/create-event")
     fun createEvent(@Body form : CreateEventForm): Call<Void>
 
+    @GET("/mobile/finish-event")
+    fun finishEvent(@Query("eventId") eventId :  String) : Call<Void>
+
 }

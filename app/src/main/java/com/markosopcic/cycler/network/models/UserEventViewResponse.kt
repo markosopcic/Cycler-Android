@@ -11,7 +11,7 @@ data class UserEventViewResponse(
     val accepted: Int,
     val description: Any,
     val endTime: String,
-    val finished: Boolean,
+    var finished: Boolean,
     val id: String,
     val invited: Int,
     val name: String,

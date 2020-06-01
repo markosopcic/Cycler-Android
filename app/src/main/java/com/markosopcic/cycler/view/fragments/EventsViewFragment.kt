@@ -31,7 +31,7 @@ class EventsViewFragment : Fragment(){
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel.feedItems.value = mutableListOf()
-    adapter = UserEventsViewAdapter(mutableListOf(),::loadMoreEvents )
+    adapter = UserEventsViewAdapter(viewModel.getUserId()!!,mutableListOf(),::loadMoreEvents, ::finishEvent )
    events_view_recyclerview.adapter = adapter
     val manager = LinearLayoutManager(this.activity)
     manager.stackFromEnd = false
@@ -42,6 +42,14 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
     viewModel.loadMoreUserEvents(::onLoadMoreCallback)
 }
+
+    fun finishEvent(id : String){
+        viewModel.finishEvent(id,::changeFinishedOnSuccess)
+    }
+
+    fun changeFinishedOnSuccess(id :String ){
+        adapter!!.finishEvent(id)
+    }
 
 fun loadMoreEvents(){
     viewModel.loadMoreUserEvents(::onLoadMoreCallback)

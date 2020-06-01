@@ -145,9 +145,6 @@ class TrackingViewModel(
 
     fun ConsumeLocation(location: Location) {
         if (lastLocation != null) {
-
-
-
             val p = 0.017453292519943295
             val a =
                 0.5 - Math.cos((location.latitude - lastLocation!!.latitude) * p) / 2 +
@@ -160,49 +157,44 @@ class TrackingViewModel(
             }
             addLocationToDatabase(location)
 
-
             if (distanceMoved.value == null)
                 distanceMoved.value = d
             else {
                 distanceMoved.value = distanceMoved.value!! + d
             }
-
         }
-        if (lastLocation == null || location.accuracy < lastLocation!!.accuracy || location.time > lastLocation!!.time) {
-            lastLocation = location
-            val updateOnlineStatus = ChronoUnit.SECONDS.between(
-                lastUpdatedLocation,
-                LocalDateTime.now()
-            ) > 10
-            if (updateOnlineStatus) {
-                lastUpdatedLocation = LocalDateTime.now()
+        lastLocation = location
+
+        val updateOnlineStatus = ChronoUnit.SECONDS.between(
+            lastUpdatedLocation,
+            LocalDateTime.now()
+        ) > 10
+        if (updateOnlineStatus) {
+            lastUpdatedLocation = LocalDateTime.now()
+        }
+
+        if (onlineTracking.value!!) {
+            val eventId = if (eventTracking.value!!) selectedEvent.value?.id else null
+            if (ChronoUnit.SECONDS.between(lastLocationTime,LocalDateTime.now())  < 1){
+                return
+            } else {
+                lastLocationTime = LocalDateTime.now()
             }
-
-
-
-            if (onlineTracking.value!!) {
-                val eventId = if (eventTracking.value!!) selectedEvent.value?.id else null
-                if (ChronoUnit.SECONDS.between(lastLocationTime,LocalDateTime.now())  < 1){
-                    return
-                } else {
-                    lastLocationTime = LocalDateTime.now()
+            cyclerAPI.sendLocation(
+                LocationModel(
+                    eventId,
+                    location.longitude,
+                    location.latitude,
+                    updateOnlineStatus
+                )
+            ).enqueue(object :
+                Callback<Void> {
+                override fun onFailure(call: Call<Void>, t: Throwable) {
                 }
-                cyclerAPI.sendLocation(
-                    LocationModel(
-                        eventId,
-                        location.longitude,
-                        location.latitude,
-                        updateOnlineStatus
-                    )
-                ).enqueue(object :
-                    Callback<Void> {
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                    }
 
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    }
-                })
-            }
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                }
+            })
         }
     }
 
