@@ -1,20 +1,27 @@
 package com.markosopcic.cycler.view.fragments
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.PermissionChecker
+import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -125,6 +132,8 @@ class TrackingFragment : Fragment() {
 
         startTrackingButton.setOnClickListener {
             if (!viewModel.trackingActive.value!!) {
+                if(requestPermissions()){
+
                 setupTrackingStart()
                 viewModel.trackingActive.value = true
                 val intent = Intent(context, LocationService::class.java)
@@ -141,6 +150,7 @@ class TrackingFragment : Fragment() {
                     Context.BIND_AUTO_CREATE
                 )
                 context?.startService(intent)
+                }
             } else {
                 viewModel.trackingActive.value = false
                 setupTrackingPause()
@@ -156,6 +166,33 @@ class TrackingFragment : Fragment() {
 
     fun consumeLocation(loc : Location){
         viewModel.ConsumeLocation(loc)
+    }
+
+    fun requestPermissions() : Boolean{
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&(checkSelfPermission(requireContext(),Manifest.permission.INTERNET) != PermissionChecker.PERMISSION_GRANTED || checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PermissionChecker.PERMISSION_GRANTED || checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PermissionChecker.PERMISSION_GRANTED || checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            ) != PermissionChecker.PERMISSION_GRANTED)) {
+            Toast.makeText(requireContext(), "Please give location permission!", Toast.LENGTH_SHORT).show()
+            val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+            ActivityCompat.requestPermissions(TrackingFragment@this.activity as Activity, permissions, 0)
+            return false
+        }else if(checkSelfPermission(requireContext(),Manifest.permission.INTERNET) != PermissionChecker.PERMISSION_GRANTED || checkSelfPermission(requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PermissionChecker.PERMISSION_GRANTED || checkSelfPermission(requireContext(),
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) != PermissionChecker.PERMISSION_GRANTED
+        ){
+            val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+            ActivityCompat.requestPermissions(TrackingFragment@this.activity as Activity, permissions, 0)
+            return false
+        }
+
+
+        return true
     }
 
 

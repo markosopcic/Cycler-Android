@@ -5,6 +5,7 @@ import android.content.Context
 import android.location.Location
 import android.util.Log
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.markosopcic.cycler.data.CyclerDatabase
@@ -16,8 +17,6 @@ import com.markosopcic.cycler.network.forms.EventModel
 import com.markosopcic.cycler.network.forms.LocationModel
 import com.markosopcic.cycler.network.models.EventResponse
 import com.markosopcic.cycler.utility.Constants
-import com.microsoft.signalr.HubConnection
-import com.microsoft.signalr.HubConnectionState
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -68,6 +67,8 @@ class TrackingViewModel(
 
         }
     }
+
+
 
     fun StopTracking() {
         val dbevent = cyclerDatabase.eventDao().getEventById(currentEventId!!)
@@ -143,16 +144,49 @@ class TrackingViewModel(
 
     }
 
+    var _eQuatorialEarthRadius = 6378.1370
+    var _d2r = Math.PI / 180.0
+
+    private fun HaversineInM(
+        lat1: Double,
+        long1: Double,
+        lat2: Double,
+        long2: Double
+    ) : Double {
+        return (1000.0 * HaversineInKM(lat1, long1, lat2, long2))
+    }
+
+    private fun HaversineInKM(
+        lat1: Double,
+        long1: Double,
+        lat2: Double,
+        long2: Double
+    ): Double {
+        val dlong = (long2 - long1) * _d2r
+        val dlat = (lat2 - lat1) * _d2r
+        val a: Double = Math.pow(
+            Math.sin(dlat / 2.0),
+            2.0
+        ) + Math.cos(lat1 * _d2r) * Math.cos(lat2 * _d2r) * Math.pow(
+            Math.sin(dlong / 2.0),
+            2.0
+        )
+        val c: Double =
+            2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1.0 - a))
+        return _eQuatorialEarthRadius * c
+    }
+
+
+
     fun ConsumeLocation(location: Location) {
+        Log.d("NextLocation",location.time.toString())
         if (lastLocation != null) {
-            val p = 0.017453292519943295
-            val a =
-                0.5 - Math.cos((location.latitude - lastLocation!!.latitude) * p) / 2 +
-                        Math.cos(lastLocation!!.latitude * p) * Math.cos(location.latitude * p) *
-                        (1 - Math.cos((location.longitude - lastLocation!!.longitude) * p)) / 2
-            val d = 12742 * Math.asin(Math.sqrt(a)) * 1000
+
+
+            val d = HaversineInM(location.latitude,location.longitude,lastLocation!!.latitude,lastLocation!!.longitude)
 
             if(d ==  0.0){
+                lastLocation = location
                 return
             }
             addLocationToDatabase(location)

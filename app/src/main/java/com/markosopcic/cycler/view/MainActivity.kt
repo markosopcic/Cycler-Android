@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
         }
         supportFragmentManager.beginTransaction().replace(R.id.placeholder, homeFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
-        val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_BACKGROUND_LOCATION)
         ActivityCompat.requestPermissions(this, permissions, 0)
 
 
