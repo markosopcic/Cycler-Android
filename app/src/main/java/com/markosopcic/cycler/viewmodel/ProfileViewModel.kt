@@ -5,12 +5,17 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.markosopcic.cycler.CyclerApplication
 import com.markosopcic.cycler.data.CyclerDatabase
+import com.markosopcic.cycler.dependencyinjection.viewModelModule
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.forms.APILocationModel
 import com.markosopcic.cycler.network.forms.EventModel
 import com.markosopcic.cycler.network.models.UserProfileResponse
 import com.markosopcic.cycler.utility.Constants
+import org.koin.core.context.KoinContextHandler.get
+import org.koin.core.context.stopKoin
+import org.koin.dsl.koinApplication
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -91,14 +96,17 @@ class ProfileViewModel(val cyclerAPI: CyclerAPI,val cyclerDatabase: CyclerDataba
     }
 
     fun logout(callback : (() -> Unit)){
+
         app.getSharedPreferences(Constants.USER_PREFERENCE_KEY, Context.MODE_PRIVATE).edit().remove(Constants.USER_ID_KEY).apply()
         app.getSharedPreferences(Constants.COOKIES_PREFERENCE_NAME, Context.MODE_PRIVATE).edit().putString(Constants.COOKIES_PREFERENCE_KEY,null).apply()
         cyclerAPI.logout().enqueue(object : Callback<Void>{
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 callback.invoke()
+                get().unloadModules(listOf(viewModelModule))
             }
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 callback.invoke()
+                get().unloadModules(listOf(viewModelModule))
             }
 
         })

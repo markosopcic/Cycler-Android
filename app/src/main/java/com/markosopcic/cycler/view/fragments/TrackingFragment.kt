@@ -120,7 +120,13 @@ class TrackingFragment : Fragment() {
                 val intent = Intent(context, LocationService::class.java)
                 liveTrackingSwitch.isEnabled = true
                 intent.action = "stop"
-                context?.unbindService(serviceConnection)
+                if(viewModel.mBound.value != null && viewModel.mBound.value!!){
+                    try{
+                        context?.unbindService(serviceConnection)
+                    }catch (ex : Exception){
+
+                    }
+                }
                 context?.startService(intent)
                 viewModel.StopTracking()
             }

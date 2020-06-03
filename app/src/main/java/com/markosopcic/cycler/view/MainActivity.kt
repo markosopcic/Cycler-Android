@@ -9,10 +9,14 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.markosopcic.cycler.R
+import com.markosopcic.cycler.dependencyinjection.databaseModule
+import com.markosopcic.cycler.dependencyinjection.networkModule
+import com.markosopcic.cycler.dependencyinjection.viewModelModule
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.utility.Constants
 import com.markosopcic.cycler.view.fragments.*
 import org.koin.android.ext.android.get
+import org.koin.android.ext.android.getKoin
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        getKoin().loadModules(arrayListOf(viewModelModule, networkModule, databaseModule))
         if (!isUserLoggedIn()) {
             var intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)

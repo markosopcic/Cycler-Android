@@ -47,6 +47,16 @@ val databaseModule = module {
     }
 }
 
+val anonymousViewModule = module{
+    single {
+        LoginViewModel(get(), get())
+    }
+
+    single{
+        RegisterViewModel(get(),get())
+    }
+}
+
 val viewModelModule = module {
     single {
         FriendRequestsViewModel(get(), get())
@@ -67,17 +77,12 @@ val viewModelModule = module {
         HomeViewModel(get(), get())
     }
 
-    single {
-        LoginViewModel(get(), get())
-    }
 
     single{
         ProfileViewModel(get(),get(),get())
     }
 
-    single{
-        RegisterViewModel(get(),get())
-    }
+
 
     single{
         EventViewViewModel(get(),get())
