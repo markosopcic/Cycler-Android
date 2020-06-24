@@ -8,9 +8,7 @@ import android.view.ViewGroup
 
 import com.markosopcic.cycler.R
 import com.markosopcic.cycler.view.adapters.EventsPagerAdapter
-import com.markosopcic.cycler.view.adapters.InvitationsPagerAdapter
 import kotlinx.android.synthetic.main.events_fragment.*
-import kotlinx.android.synthetic.main.fragment_invitations.*
 
 class EventsFragment : Fragment() {
 

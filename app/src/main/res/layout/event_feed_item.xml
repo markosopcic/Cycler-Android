@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
@@ -13,11 +14,11 @@
 
         <TextView
             android:id="@+id/feed_item_name"
-            android:layout_width="149dp"
-            android:layout_height="41dp"
+            android:layout_width="212dp"
+            android:layout_height="76dp"
             android:layout_marginStart="4dp"
             android:text="TextView"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,20 +47,20 @@
 
         <TextView
             android:id="@+id/feed_item_owner"
-            android:layout_width="191dp"
-            android:layout_height="61dp"
+            android:layout_width="156dp"
+            android:layout_height="60dp"
             android:text="TextView"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/feed_item_start_time"
-            android:layout_width="363dp"
-            android:layout_height="43dp"
-            android:layout_marginTop="60dp"
+            android:layout_width="372dp"
+            android:layout_height="29dp"
+            android:layout_marginTop="80dp"
             android:text="TextView"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@+id/feed_item_name"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -185,10 +185,6 @@ class TrackingViewModel(
 
             val d = HaversineInM(location.latitude,location.longitude,lastLocation!!.latitude,lastLocation!!.longitude)
 
-            if(d ==  0.0){
-                lastLocation = location
-                return
-            }
             addLocationToDatabase(location)
 
             if (distanceMoved.value == null)

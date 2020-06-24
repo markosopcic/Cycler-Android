@@ -35,6 +35,7 @@ class ProfileViewModel(val cyclerAPI: CyclerAPI,val cyclerDatabase: CyclerDataba
 
         if(events.size == 0){
             Toast.makeText(app,"No events to upload!",Toast.LENGTH_SHORT).show()
+            callback.invoke()
             return
         }else{
             Toast.makeText(app,"Uploading " + events.size.toString()+ " events!",Toast.LENGTH_SHORT).show()

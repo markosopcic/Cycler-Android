@@ -7,7 +7,7 @@ import com.markosopcic.cycler.view.fragments.EventInvitationsFragment
 import com.markosopcic.cycler.view.fragments.FriendRequestsFragment
 import com.markosopcic.cycler.view.fragments.FriendsFragment
 
-class InvitationsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class SocialFragmentPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     lateinit var friendRequestsFragment: FriendRequestsFragment
     lateinit var eventInvitationsFragment: EventInvitationsFragment

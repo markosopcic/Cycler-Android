@@ -15,6 +15,27 @@ class HomeViewModel(val cyclerAPI: CyclerAPI, val app: Application) : AndroidVie
 
     var eventFeed = MutableLiveData<MutableList<EventFeedResponse>>(arrayListOf())
 
+    fun refreshFeedItems(callback: ((Boolean) -> Unit)?){
+        cyclerAPI.getEventFeed(0,Constants.FEED_PAGE_SIZE).enqueue(object : Callback<List<EventFeedResponse>>{
+            override fun onFailure(call: Call<List<EventFeedResponse>>, t: Throwable) {
+                callback?.invoke(false)
+            }
+
+            override fun onResponse(
+                call: Call<List<EventFeedResponse>>,
+                response: Response<List<EventFeedResponse>>
+            ) {
+                if(response.isSuccessful){
+                    eventFeed.value = response.body() as MutableList<EventFeedResponse>?
+                    callback?.invoke(true)
+                }else{
+                    callback?.invoke(false)
+                }
+            }
+
+        })
+    }
+
     fun getMoreEventFeedItems(callback: ((Boolean) -> Unit)?) {
         cyclerAPI.getEventFeed(eventFeed.value!!.size, Constants.FEED_PAGE_SIZE)
             .enqueue(object : Callback<List<EventFeedResponse>> {

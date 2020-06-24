@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.markosopcic.cycler.R
@@ -27,8 +28,17 @@ class FriendRequestsFragment : Fragment() {
         invitations_recycler_view.layoutManager = manager
         val adapter = FriendRequestsAdapter(ArrayList<FriendRequestResponse>())
         invitations_recycler_view.adapter = adapter
-        viewModel.refreshFriendRequests()
+        viewModel.refreshFriendRequests(null)
         adapter.onAcceptRequest = viewModel::acceptRequest
+
+        friend_requests_refresh.setOnRefreshListener {
+            viewModel.refreshFriendRequests{
+                friend_requests_refresh.isRefreshing = false
+                if(!it){
+                    Toast.makeText(requireActivity(),"Error while refreshing requests!",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         viewModel.invitations.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             adapter.changeDataset(it)

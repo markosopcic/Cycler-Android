@@ -23,6 +23,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         logo.typeface = Typeface.createFromAsset(assets, "fonts/Lobster-Regular.ttf")
+
+
         loginButton.setOnClickListener {
             if (emailInput.text.isEmpty() || passwordInput.text.isEmpty()) {
                 Toast.makeText(this, "Email or password is empty!", Toast.LENGTH_LONG).show()
@@ -32,7 +34,6 @@ class LoginActivity : AppCompatActivity() {
                 ::loginCallback
             )
         }
-
         emailInput.doOnTextChanged { text, start, count, after ->
             viewModel.emailInput.value = text.toString()
         }

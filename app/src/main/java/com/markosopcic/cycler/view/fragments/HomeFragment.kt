@@ -28,11 +28,20 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        home_feed_refresh.setOnRefreshListener {
+            viewModel.refreshFeedItems {
+                adapter.loadedAll = false
+                home_feed_refresh.isRefreshing = false
+                if(!it){
+                    Toast.makeText(requireActivity(), "Error while refreshing feed!",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
         val manager = LinearLayoutManager(this@HomeFragment.activity)
         manager.stackFromEnd = false
         event_feed_recyclerview.layoutManager = manager
         event_feed_recyclerview.adapter = adapter
+        adapter.loadedAll = false
         viewModel.getMoreEventFeedItems(null)
         viewModel.eventFeed.observe(viewLifecycleOwner, Observer {
             adapter.changeDataset(it)

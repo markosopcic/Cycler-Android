@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.markosopcic.cycler.R
-import com.markosopcic.cycler.network.models.RegisterViewModel
+import com.markosopcic.cycler.viewmodel.RegisterViewModel
 import kotlinx.android.synthetic.main.activity_register.*
 import org.koin.android.ext.android.get
 

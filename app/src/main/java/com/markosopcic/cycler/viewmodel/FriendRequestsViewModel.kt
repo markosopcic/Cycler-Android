@@ -37,20 +37,26 @@ class FriendRequestsViewModel(private val cyclerAPI: CyclerAPI, val app: Applica
 
     }
 
-    fun refreshFriendRequests() {
+    fun refreshFriendRequests(callback : ((Boolean) -> Unit)?) {
         cyclerAPI.getFriendRequests().enqueue(object :
             Callback<List<FriendRequestResponse>> {
             override fun onFailure(call: Call<List<FriendRequestResponse>>, t: Throwable) {
                 Toast.makeText(app, "Couldn't load requests!", Toast.LENGTH_SHORT).show()
+                callback?.invoke(false)
             }
 
             override fun onResponse(
                 call: Call<List<FriendRequestResponse>>,
                 response: Response<List<FriendRequestResponse>>
             ) {
-                val list = ArrayList<FriendRequestResponse>()
-                response.body()?.let { list.addAll(it) }
-                invitations.value = list
+                if(response.isSuccessful){
+                    val list = ArrayList<FriendRequestResponse>()
+                    response.body()?.let { list.addAll(it) }
+                    invitations.value = list
+                    callback?.invoke(true)
+                }else{
+                    callback?.invoke(false)
+                }
             }
 
         })

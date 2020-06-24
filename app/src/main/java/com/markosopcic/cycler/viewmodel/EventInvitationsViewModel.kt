@@ -37,20 +37,26 @@ class EventInvitationsViewModel(private val cyclerAPI: CyclerAPI, val app: Appli
 
     }
 
-    fun refreshEventInvitations() {
+    fun refreshEventInvitations(callback : ((Boolean) -> Unit)?) {
         cyclerAPI.getEventInvitations().enqueue(object :
             Callback<List<EventInvitationResponse>> {
             override fun onFailure(call: Call<List<EventInvitationResponse>>, t: Throwable) {
                 Toast.makeText(app, "Couldn't load requests!", Toast.LENGTH_SHORT).show()
+                callback?.invoke(false)
             }
 
             override fun onResponse(
                 call: Call<List<EventInvitationResponse>>,
                 response: Response<List<EventInvitationResponse>>
             ) {
-                val list = ArrayList<EventInvitationResponse>()
-                response.body()?.let { list.addAll(it) }
-                eventInvitations.value = list
+                if(response.isSuccessful){
+                    val list = ArrayList<EventInvitationResponse>()
+                    response.body()?.let { list.addAll(it) }
+                    eventInvitations.value = list
+                    callback?.invoke(true)
+                }else{
+                    callback?.invoke(false)
+                }
 
             }
 

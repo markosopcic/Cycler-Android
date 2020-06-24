@@ -27,6 +27,7 @@ class EventViewViewModel(val cyclerAPI: CyclerAPI, val app : Application) : Andr
             Callback<List<UserEventViewResponse>>{
             override fun onFailure(call: Call<List<UserEventViewResponse>>, t: Throwable) {
             Toast.makeText(app,"Something went wrong! Try again later!",Toast.LENGTH_SHORT).show()
+                callback?.invoke(false)
             }
 
             override fun onResponse(
@@ -35,15 +36,16 @@ class EventViewViewModel(val cyclerAPI: CyclerAPI, val app : Application) : Andr
             ) {
                 if(!response.isSuccessful){
                     Toast.makeText(app,"Something went wrong! Try again later!",Toast.LENGTH_SHORT).show()
+                    callback?.invoke(false)
                 }else{
                     val list = mutableListOf<UserEventViewResponse>()
                     list.addAll(feedItems.value!!)
                     list.addAll(response.body()!!)
                     feedItems.value = list
-                    if(response.body()!!.size == 0){
-                        callback!!.invoke(false)
+                    if(!response.body()!!.isEmpty()){
+                        callback?.invoke(true)
                     }else{
-                        callback!!.invoke(true)
+                        callback?.invoke(false)
                     }
                 }
             }

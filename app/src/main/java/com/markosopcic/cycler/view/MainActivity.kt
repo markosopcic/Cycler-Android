@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
         var bottomNavigationView = findViewById(R.id.bottom_navigation) as BottomNavigationView
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.homeButton -> {

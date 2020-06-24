@@ -1,4 +1,4 @@
-package com.markosopcic.cycler.network.models
+package com.markosopcic.cycler.viewmodel
 
 import android.app.Application
 import android.util.Patterns

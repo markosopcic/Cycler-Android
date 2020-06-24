@@ -40,6 +40,15 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         adapter!!.setDataset(it)
     })
 
+    events_view_refresh.setOnRefreshListener {
+        viewModel.loadMoreUserEvents {
+            events_view_refresh.isRefreshing = false
+            if(it){
+                adapter?.loadedAll = false
+            }
+        }
+    }
+
     viewModel.loadMoreUserEvents(::onLoadMoreCallback)
 }
 

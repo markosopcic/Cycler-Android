@@ -22,3 +22,4 @@ interface EventDAO {
     fun getAllEvents() : List<Event>
 
 }
+

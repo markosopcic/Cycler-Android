@@ -6,17 +6,12 @@ import com.markosopcic.cycler.network.CustomTrust
 import com.markosopcic.cycler.network.CyclerAPI
 import com.markosopcic.cycler.network.interceptors.AddCookiesInterceptor
 import com.markosopcic.cycler.network.interceptors.ReceivedCookiesInterceptor
-import com.markosopcic.cycler.network.models.RegisterViewModel
-import com.markosopcic.cycler.network.models.UserEventViewResponse
 import com.markosopcic.cycler.utility.Constants
 import com.markosopcic.cycler.viewmodel.*
-import com.microsoft.signalr.HubConnectionBuilder
-import io.reactivex.Single
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.HashSet
 
 val networkModule = module {
 
@@ -39,7 +34,6 @@ val networkModule = module {
 }
 
 
-
 val databaseModule = module {
 
     single {
@@ -47,13 +41,13 @@ val databaseModule = module {
     }
 }
 
-val anonymousViewModule = module{
+val anonymousViewModule = module {
     single {
         LoginViewModel(get(), get())
     }
 
-    single{
-        RegisterViewModel(get(),get())
+    single {
+        RegisterViewModel(get(), get())
     }
 }
 
@@ -78,18 +72,18 @@ val viewModelModule = module {
     }
 
 
-    single{
-        ProfileViewModel(get(),get(),get())
+    single {
+        ProfileViewModel(get(), get(), get())
     }
 
 
 
-    single{
-        EventViewViewModel(get(),get())
+    single {
+        EventViewViewModel(get(), get())
     }
 
-    single{
-        NewEventViewModel(get(),get())
+    single {
+        NewEventViewModel(get(), get())
     }
 }
 
@@ -98,9 +92,7 @@ fun provideRetrofitInstance(context: Context): Retrofit {
     return Retrofit.Builder().client(
         CustomTrust.GetCustomTrustClient().addInterceptor(AddCookiesInterceptor(context))
             .addInterceptor(ReceivedCookiesInterceptor(context)).build()
-    ).baseUrl(
-        Constants.ROOT_URL
-    ).addConverterFactory(
-        GsonConverterFactory.create()
-    ).build()
+    ).baseUrl(Constants.ROOT_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 }
