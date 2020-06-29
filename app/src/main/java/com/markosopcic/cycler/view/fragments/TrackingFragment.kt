@@ -7,13 +7,14 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -138,7 +139,7 @@ class TrackingFragment : Fragment() {
 
         startTrackingButton.setOnClickListener {
             if (!viewModel.trackingActive.value!!) {
-                if(requestPermissions()){
+                if(requestPermissions() && CheckGpsStatus()){
 
                 setupTrackingStart()
                 viewModel.trackingActive.value = true
@@ -155,6 +156,8 @@ class TrackingFragment : Fragment() {
                     serviceConnection,
                     Context.BIND_AUTO_CREATE
                 )
+
+
                 context?.startService(intent)
                 }
             } else {
@@ -199,6 +202,18 @@ class TrackingFragment : Fragment() {
 
 
         return true
+    }
+
+    fun CheckGpsStatus(): Boolean {
+        val locationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val GpsStatus = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        if(!GpsStatus){
+                Toast.makeText(requireContext(),"Please enable location services!",Toast.LENGTH_SHORT).show()
+                val gpsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(gpsIntent)
+        }
+        return GpsStatus
     }
 
 

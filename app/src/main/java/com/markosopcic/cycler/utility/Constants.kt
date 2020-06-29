@@ -4,8 +4,8 @@ class Constants {
 
     companion object {
         // host of virtual device
-        val ROOT_URL = "http://10.0.2.2"
-        //val ROOT_URL = "https://cycler.hopto.org"
+        //val ROOT_URL = "http://10.0.2.2"
+        val ROOT_URL = "https://cycler.hopto.org"
 
 
         val COOKIES_PREFERENCE_NAME = "CyclerPreferences"
